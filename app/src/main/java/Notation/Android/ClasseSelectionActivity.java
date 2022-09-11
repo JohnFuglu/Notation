@@ -67,6 +67,7 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
                  }
                 createButtonDynamicly(sheet.getSheetName());
                 classes.add(createClasse(set,sheet.getSheetName()));
+                saveClassesData(classes);
             }
         } catch (IOException e)
         {
@@ -91,6 +92,7 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
         Intent notationActivity = new Intent(ClasseSelectionActivity.this, MainActivity.class);
         Button b = (Button)v;
         //TODO faire le passage des classe S à classe
+        notationActivity.putExtra("button_message",b.getText());
         startActivity(notationActivity);
     }
 }

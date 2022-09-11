@@ -37,9 +37,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        String classeToFetch   = intent.getStringExtra("button_message");
         try {
             DataHandler dataHandler = new DataHandler();
-            classe =dataHandler.classeFromFile("CP");
+            classe =dataHandler.classeFromFile(classeToFetch);
 
             for(int i =0;i<classe.getClasseListEleves().size();i++){
                 String s = classe.getClasseListEleves().get(i).getnomPrenom();
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }catch (FileNotFoundException e) {
             try {
-
                 classe = new Classe("CP");//TODO soit ouverture fichier, vient d'une activité où on a choisi la classe
             } catch (IOException e2) {
                 e.printStackTrace();
