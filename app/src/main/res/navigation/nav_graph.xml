@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/classeSelectionActivity">
+
+    <activity
+        android:id="@+id/classeSelectionActivity"
+        android:name="Notation.Android.ClasseSelectionActivity"
+        android:label="activity_classe_selection"
+        tools:layout="@layout/activity_classe_selection" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="Notation.Android.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <activity
+        android:id="@+id/devoirActivity"
+        android:name="Notation.Android.DevoirActivity"
+        android:label="activity_devoir"
+        tools:layout="@layout/activity_devoir" />
+    <activity
+        android:id="@+id/notationActivity"
+        android:name="Notation.Android.NotationActivity"
+        android:label="activity_notation"
+        tools:layout="@layout/activity_notation" />
+</navigation>
