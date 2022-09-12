@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,10 +28,7 @@ import CoreStructure.Eleve;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Classe classe;
-
-
-
-
+    private Button creerDevoir;
 
 
 //    @Override
@@ -39,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         String classeToFetch   = intent.getStringExtra("button_message");
+
         try {
             DataHandler dataHandler = new DataHandler();
             classe =dataHandler.classeFromFile(classeToFetch);
@@ -67,6 +66,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
         }
+        TextView intitulle = findViewById(R.id.classe_nom);
+        intitulle.setText(classe.getNomClasse());
+        creerDevoir = findViewById(R.id.creerDevoir_button);
+        creerDevoir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button b = (Button) v;
+                Intent devoirAct = new Intent(MainActivity.this,DevoirActivity.class);
+                devoirAct.putExtra("Classe_Name",classe.getNomClasse());
+                startActivity(devoirAct);
+            }
+        });
     }
     protected  Set<String> xlsReader() throws IOException {
         Set<String> set = new HashSet<>();
@@ -122,4 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DataHandler dataHandler =new DataHandler();
         dataHandler.createSerializedClasse(c);
     }
+    //TODO rassembler les chargements ici
+    private void persistentDataUpdate(){}
 }

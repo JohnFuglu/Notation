@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".DevoirActivity">
 
+    <TextView
+        android:id="@+id/classe_aff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="classe"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tool" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool"
         android:layout_width="match_parent"
@@ -23,7 +33,7 @@
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="80dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
@@ -31,7 +41,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/compView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -40,13 +50,14 @@
 
         <Spinner
             android:id="@+id/compet_Spinner"
+            android:entries="@array/competences"
             style="@style/Widget.AppCompat.Spinner.DropDown"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/CompView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -56,6 +67,7 @@
         <Spinner
             android:id="@+id/compet_Spinner2"
             style="@style/Widget.AppCompat.Spinner.DropDown"
+            android:entries="@array/competences"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -110,6 +122,7 @@
         <Spinner
             android:id="@+id/smiley_spinner"
             style="@style/Widget.AppCompat.Spinner.DropDown"
+            android:entries="@array/smileys"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             tools:ignore="SpeakableTextPresentCheck" />

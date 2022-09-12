@@ -110,4 +110,5 @@ public class NotationActivity extends AppCompatActivity implements View.OnClickL
         if(eleve.getNoteParticipation()==5)
             partPlusButton.setEnabled(false);
     }
+
 }

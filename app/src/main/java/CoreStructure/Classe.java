@@ -15,8 +15,22 @@ public class Classe implements Serializable {
 
     private String nomClasse;
     private ArrayList<Eleve> classEleves = new ArrayList<Eleve>();
-    private ArrayList<Devoir> devoirDonnes=new ArrayList<>();
 
+    public ArrayList<Devoir> getDevoirDonnes() {
+        return devoirDonnes;
+    }
+    public boolean devoirPresent(Devoir d){
+       for(int i=0;i<devoirDonnes.size();i++){
+           if(devoirDonnes.get(i).getIntitulle().equals(d.getIntitulle()))
+               return true;
+       }
+        return false;
+    }
+    private ArrayList<Devoir> devoirDonnes=new ArrayList<>();
+    public void ajouterUnDevoir(Devoir d){
+        if(!devoirPresent(d))
+            devoirDonnes.add(d);
+    }
     @RequiresApi(api = Build.VERSION_CODES.N)
     public	Classe (String nomClasse) throws IOException {
         this.nomClasse=nomClasse;
@@ -50,7 +64,7 @@ public class Classe implements Serializable {
     public void donneUnDevoir(Devoir devoir) {
         boolean ok=false;
         for(Devoir d : devoirDonnes) {
-            if(devoir.getNom()==d.getNom())
+            if(devoir.getIntitulle()==d.getIntitulle())
                 throw new Error("Ce devoir existe d�j� dans cette classe !");
             ok=true;
         }

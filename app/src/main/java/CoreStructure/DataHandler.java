@@ -2,8 +2,6 @@ package CoreStructure;
 
 import android.os.Environment;
 
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,7 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class DataHandler {
-    private ArrayList<JSONObject> objCollection=new ArrayList<>();
+
 
     public void createSerializedClasse(Classe classe){
         FileOutputStream fileOutputStream=null;
@@ -86,5 +84,36 @@ public class DataHandler {
         }
         return null;
     }
+    public void sauverDevoirs(ArrayList a){
+        FileOutputStream fileOutputStream=null;
+        ObjectOutputStream objectOutputStream=null;
+        try{
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Devoirs");
+            fileOutputStream=new FileOutputStream(file);
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(a);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            objectOutputStream. flush();
+            objectOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public Devoir trouverLeDevoir(ArrayList<Devoir> devoirs,Devoir element){
+       for(int i =0;i< devoirs.size();i++){
+           if(devoirs.get(i).getIntitulle()==element.getIntitulle()){
+               return devoirs.get(i);
+           }
+          }
+        return null;
+    }
+    //TODO faire une methode pour le chargment repetitif
+    public void majClasse(Classe c) throws FileNotFoundException {
+        createSerializedClasse(c);
+
+    }
 }

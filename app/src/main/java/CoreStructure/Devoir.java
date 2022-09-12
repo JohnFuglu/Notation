@@ -13,29 +13,22 @@ import java.util.HashMap;
  * */
 
 public class Devoir implements Serializable {
-    private String nom;
+    private String intitulle;
     private String consigne;
     private Date dateDevoir;
     private String remarques;
     private String[] critereStrings=new String[4];
+
     private HashMap<String, Smileys> grilleEval=new HashMap<>();
     ArrayList<Competence>competencesEvalues=new ArrayList<>();
+    ArrayList<String>competencesEvaluesString=new ArrayList<>();
 
-    public Devoir(String nom,String consigne, Date dateDevoir) {
-        this.nom=nom;
+    public Devoir(String intitulle,String consigne, Date dateDevoir) {
+        this.intitulle =intitulle;
         this.consigne = consigne;
         this.dateDevoir = dateDevoir;
     }
 
-    /**Cr�e une grille d'�val*/
-    public void creeGrilleEval() {
-        for(int i =0;i<4;i++)
-            grilleEval.put(critereStrings[i], Smileys.VIDE);
-    }
-    /**Evalue la grille*/
-    public void evalueGrille(Smileys s,String key) {
-        grilleEval.put(key, s);
-    }
     /**Commente le devoir de l'�l�ve
      * @param remarques sur le travail*/
     public void commenterDevoir(String remarques) {this.remarques=remarques;}
@@ -44,6 +37,9 @@ public class Devoir implements Serializable {
     public void ajouteCompetenceauDevoir(Competence comp) {
         competencesEvalues.add(comp);
     }
+    public void ajouteCompetenceauDevoir(String comp) {
+        competencesEvaluesString.add(comp);
+    }
     /**Rempli les crit�res d'�valuation
      * @param string d'un crit�re*/
     public void rempliCriteres(String texte,int i) {
@@ -51,7 +47,7 @@ public class Devoir implements Serializable {
     }
 
 
-    public String getNom() {
-        return nom;
+    public String getIntitulle() {
+        return intitulle;
     }
 }
