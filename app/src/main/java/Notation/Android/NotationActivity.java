@@ -3,7 +3,10 @@ package Notation.Android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.FileNotFoundException;
 
 import CoreStructure.Classe;
-import CoreStructure.Eleve;
 import CoreStructure.DataHandler;
+import CoreStructure.Eleve;
 
 public class NotationActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView nomView,classeView;
@@ -20,7 +23,7 @@ public class NotationActivity extends AppCompatActivity implements View.OnClickL
     private Classe classe;
     protected Eleve eleve;
     private final DataHandler dataHandler = new DataHandler();
-
+    private Spinner devoirSpinner;
     private Button saveButton,
             compPlusButton,compMinusButton,
     partPlusButton,partMinusButton;
@@ -38,19 +41,44 @@ public class NotationActivity extends AppCompatActivity implements View.OnClickL
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        DataHandler dh = new DataHandler();
+        try {
+            dh.classeFromFile(classe.getNomClasse());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        createButtons();
+
+        devoirSpinner=findViewById(R.id.choix_devoir);
+
+        String[] strings = new String[classe.getDevoirDonnes().size()];
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapter.addAll(strings);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+       devoirSpinner.setAdapter(adapter);
+        devoirSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+}
+
+    private void createButtons() {
         compNumber=findViewById(R.id.comport_number);
         partNumber=findViewById(R.id.partici_number);
-
-
         compNumber.setText(Short.toString(eleve.getNoteComportement()));
         partNumber.setText(Short.toString(eleve.getNoteParticipation()));
         saveButton = findViewById(R.id.Sauver_Button);
-
         compMinusButton = findViewById(R.id.minus_comport);
         compPlusButton = findViewById(R.id.plus_comport);
         partMinusButton = findViewById(R.id.minus_partici);
         partPlusButton = findViewById(R.id.plus_partici);
-
         compMinusButton.setOnClickListener(this);
         compPlusButton.setOnClickListener(this);
         partMinusButton.setOnClickListener(this);
@@ -64,7 +92,8 @@ public class NotationActivity extends AppCompatActivity implements View.OnClickL
               dh.createSerializedClasse(classe);
             }
         });
-}
+    }
+
     private void ajouteAppreciation(){
 
     }

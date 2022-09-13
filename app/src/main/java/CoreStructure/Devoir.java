@@ -1,8 +1,9 @@
 package CoreStructure;
 
+import android.text.Editable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 
@@ -15,7 +16,7 @@ import java.util.HashMap;
 public class Devoir implements Serializable {
     private String intitulle;
     private String consigne;
-    private Date dateDevoir;
+    private String dateDevoir;
     private String remarques;
     private String[] critereStrings=new String[4];
 
@@ -23,7 +24,13 @@ public class Devoir implements Serializable {
     ArrayList<Competence>competencesEvalues=new ArrayList<>();
     ArrayList<String>competencesEvaluesString=new ArrayList<>();
 
-    public Devoir(String intitulle,String consigne, Date dateDevoir) {
+    public String getClasse() {
+        return classe;
+    }
+
+    private String classe;
+
+    public Devoir(String intitulle,String consigne, String dateDevoir) {
         this.intitulle =intitulle;
         this.consigne = consigne;
         this.dateDevoir = dateDevoir;
@@ -49,5 +56,12 @@ public class Devoir implements Serializable {
 
     public String getIntitulle() {
         return intitulle;
+    }
+
+    public void setIntitulle(Editable s) {
+        intitulle=s.toString();
+    }
+
+    public void setClasse(String classeNom) {this.classe=classeNom;
     }
 }

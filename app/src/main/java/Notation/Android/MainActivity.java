@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Button b = (Button) v;
                 Intent devoirAct = new Intent(MainActivity.this,DevoirActivity.class);
+                boolean estCreation=true;
+                devoirAct.putExtra("Creation_Devoir",estCreation);
                 devoirAct.putExtra("Classe_Name",classe.getNomClasse());
                 startActivity(devoirAct);
             }

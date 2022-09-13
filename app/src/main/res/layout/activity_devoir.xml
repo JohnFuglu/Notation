@@ -10,11 +10,35 @@
         android:id="@+id/classe_aff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:text="classe"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tool" />
+        app:layout_constraintTop_toBottomOf="@+id/tool"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/Date_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/Intitule_Text"
+        app:layout_constraintTop_toTopOf="@+id/classe_aff" />
+
+    <EditText
+        android:id="@+id/Intitule_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:minHeight="48dp"
+        android:text="Intitule"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/tool"
+        app:layout_constraintTop_toBottomOf="@+id/Date_View" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool"
@@ -33,7 +57,7 @@
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="250dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
@@ -50,7 +74,6 @@
 
         <Spinner
             android:id="@+id/compet_Spinner"
-            android:entries="@array/competences"
             style="@style/Widget.AppCompat.Spinner.DropDown"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -67,7 +90,6 @@
         <Spinner
             android:id="@+id/compet_Spinner2"
             style="@style/Widget.AppCompat.Spinner.DropDown"
-            android:entries="@array/competences"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -122,9 +144,9 @@
         <Spinner
             android:id="@+id/smiley_spinner"
             style="@style/Widget.AppCompat.Spinner.DropDown"
-            android:entries="@array/smileys"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:entries="@array/smileys"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
@@ -138,5 +160,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/Devoir_LLayout" />
+
+    <TextView
+        android:id="@+id/date_print"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Date_View"
+        app:layout_constraintStart_toEndOf="@+id/Date_View"
+        app:layout_constraintTop_toTopOf="@+id/Date_View" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

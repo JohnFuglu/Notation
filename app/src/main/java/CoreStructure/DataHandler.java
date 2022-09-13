@@ -114,6 +114,5 @@ public class DataHandler {
     //TODO faire une methode pour le chargment repetitif
     public void majClasse(Classe c) throws FileNotFoundException {
         createSerializedClasse(c);
-
     }
 }
