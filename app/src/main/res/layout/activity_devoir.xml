@@ -134,21 +134,6 @@
             android:minHeight="48dp"
             android:text="Echec" />
 
-        <TextView
-            android:id="@+id/Smiley_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Smiley"
-            android:textSize="20sp" />
-
-        <Spinner
-            android:id="@+id/smiley_spinner"
-            style="@style/Widget.AppCompat.Spinner.DropDown"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:entries="@array/smileys"
-            tools:ignore="SpeakableTextPresentCheck" />
-
     </LinearLayout>
 
     <Button

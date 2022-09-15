@@ -115,4 +115,10 @@ public class DataHandler {
     public void majClasse(Classe c) throws FileNotFoundException {
         createSerializedClasse(c);
     }
+
+    public static boolean freshStart(){
+        if(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).listFiles().length>0)
+            return false;
+        else return true;
+    }
 }

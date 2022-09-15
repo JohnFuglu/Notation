@@ -28,7 +28,7 @@ import CoreStructure.Devoir;
 public class DevoirActivity extends AppCompatActivity {
     private Spinner competence1;
     private Spinner competence2;
-    private Spinner smileys;
+
     private Classe classe;
     private String classeNom,comp1,comp2,intitulle;
     private ArrayList<Devoir> devoirs;
@@ -74,9 +74,6 @@ public class DevoirActivity extends AppCompatActivity {
 
         createSpinners();
 
-
-//TODO faire pour le smiley le listener
-        smileys = (Spinner) findViewById(R.id.smiley_spinner);
     }
 
     private void createSpinners() {

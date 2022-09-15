@@ -10,12 +10,6 @@
     <string name="notation_commentaire">Commentaire</string>
     <string name="retour_bouton">Retour</string>
     <string name="sauver_bouton">Sauver</string>
-    <string-array name="competences">
-        <item>Expérimenter produire créer</item>
-        <item>Mettre en oeuvre un projet artistique</item>
-        <item>S\'exprimer, analyser sa pratique...</item>
-        <item>Se repérer dans les domaines ...</item>
-    </string-array>
     <string-array name="smileys">
         <item>Très content + </item>
         <item>Très content - </item>
@@ -29,5 +23,10 @@
         <item>Pas content + </item>
         <item>Pas content - </item>
         <item>Pas content </item>
+    </string-array>
+    <string-array name="Trimestres">
+        <item>Trimestre 1 </item>
+        <item>Trimestre 2 </item>
+        <item>Trimestre 3 </item>
     </string-array>
 </resources>

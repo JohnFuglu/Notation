@@ -44,6 +44,19 @@ public class Classe implements Serializable {
     public String getNomClasse() {return this.nomClasse;}
     public void setNomClasse(String nom){this.nomClasse=nom;}
     /**Va chercher un �l�ve dans la classe*/
+    public Eleve getEleve(String nomPrenom) {
+        Iterator<Eleve> iterator =  classEleves.iterator();
+        while(iterator.hasNext()) {
+            Eleve eleve;
+            eleve =(Eleve)iterator.next();
+
+            if(eleve.getnomPrenom().equals(nomPrenom))
+                return eleve;
+        }
+        throw new Error("L'eleve n'est pas pr�sent dans cette classe !");
+    }
+
+
     public Eleve getEleve(String nom, String prenom) {
         Iterator<Eleve> iterator =  classEleves.iterator();
         while(iterator.hasNext()) {
@@ -79,4 +92,13 @@ public class Classe implements Serializable {
            }
        }
    }
+
+    public Devoir getDevoir(String intitule) {
+        for (Devoir d :devoirDonnes
+             ) {
+            if(d.getIntitulle().equals(intitule))
+                return d;
+        }
+        return null;
+    }
 }

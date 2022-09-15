@@ -52,7 +52,19 @@ public class Devoir implements Serializable {
     public void rempliCriteres(String texte,int i) {
         critereStrings[i]=texte;
     }
-
+    public String getCritere(int i ){
+        switch (i){
+            case 0:
+                return critereStrings[0];
+            case 1 :
+                return critereStrings[1];
+            case 2 :
+                return critereStrings[2];
+            case 3 :
+                    return critereStrings[3];
+        }
+        return "pas de critère";
+    }
 
     public String getIntitulle() {
         return intitulle;

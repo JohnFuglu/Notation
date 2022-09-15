@@ -22,18 +22,10 @@ public class Eleve  implements Comparable<Eleve>, Serializable{
     private Classe classe;
     private String nom;
     //TEST
-    private short noteTravaux;
-    private short[] nTrimestres=new short[3];
-    private short noteParticipation;
+    private double[] nTrimestreTravaux = new double[3];
     private short[] nParti=new short[3];
-    private short noteComportement;
-    private short[] nComi=new short[3];
-
+    private short[] nCompor =new short[3];
     private String[] appreciations=new String[3];
-    private boolean noteTriRentre=false;
-    private boolean notePartiRentre=false;
-    private boolean noteCompRentre=false;
-
     private double[] notesFinales = new double[3];
 
     private ArrayList<Competence> compValideArrayList = new ArrayList<Competence>();
@@ -54,21 +46,18 @@ public class Eleve  implements Comparable<Eleve>, Serializable{
     public Eleve(String nomEtPrenom,Classe classe){//TODO casser nom et prenom en 2
        nomPrenom = nomEtPrenom;
        classe=classe;
-        nTrimestres[0]=0; nTrimestres[1]=0; nTrimestres[2]=0;
-        nParti[0]=0; nParti[1]=0; nParti[2]=0;
-        nComi[0]=0; nComi[1]=0; nComi[2]=0;
-        noteTravaux=0;
-        noteParticipation=0;
-        noteComportement=5;
+        nTrimestreTravaux[0]=0; nTrimestreTravaux[1]=0; nTrimestreTravaux[2]=0;
+        nParti[0]=5; nParti[1]=5; nParti[2]=5;
+        nCompor[0]=0; nCompor[1]=0; nCompor[2]=0;
     }
     /**Note le trimestre / 10
      * @throws error si en dehors des clous
      * @return boolean rentr�e
      * */
-    public boolean noterTravaux(short note) {
+    public boolean noterTravaux(int trimestre, double note) {
         if(note<0 || note > 10)
             throw new Error("La note doit �tre comprise en 0 et 10");
-        this.noteTravaux =note;
+        this.nTrimestreTravaux[trimestre] =note;
         return true;
     }
 
@@ -76,10 +65,10 @@ public class Eleve  implements Comparable<Eleve>, Serializable{
      * @throws error si en dehors des clous
      * @return boolean rentr�e
      * */
-    public boolean noterParticipation(short note) {
+    public boolean noterParticipation(int trimestre,short note) {
         if(note<0 || note > 5)
             throw new Error("La note doit �tre comprise en 0 et 5");
-        this.noteParticipation=note;
+        this.nParti[trimestre]=note;
         return true;
     }
 
@@ -87,39 +76,21 @@ public class Eleve  implements Comparable<Eleve>, Serializable{
      * @throws error si en dehors des clous
      * @return boolean rentr�e
      * */
-    public boolean noterComportement(short note) {
+    public boolean noterComportement(int trimestre,short note) {
         if(note<0 || note > 5)
             throw new Error("La note doit �tre comprise en 0 et 5");
-        this.noteComportement=note;
+        this.nCompor[trimestre]=note;
         return true;
     }
 
-    /**Note finale du trimestre par addition des 3 sous notes
-     * stock�e dans un tableau
-     * reset les booleans pour la saisie des notes
-     * @throws error si il manque une des 3 notes � ajouter
-     * @throws error si la note est < 0 ou > 20*/
-	public double noteGlobale(int trimestre) {
-		if((Object)nTrimestres[trimestre] ==null ||(Object)nComi[trimestre] ==  null || (Object)nParti[trimestre] ==null)
-            throw new Error("Note(s) manquantes !");
-		else {
-				notesFinales[trimestre] = (nTrimestres[trimestre]+ nComi[trimestre] +nParti[trimestre]);
-				noteCompRentre=false;
-				notePartiRentre=false;
-				noteTriRentre=false;
-                return	notesFinales[trimestre];
-		}
 
-
-	}
-    public short getNoteParticipation(){return noteParticipation;}
-    public short getNoteComportement(){return  noteComportement;}
+    public short getNoteParticipation(int trimestre){return nParti[trimestre];}
+    public short getNoteComportement(int trimestre){return  nCompor[trimestre];}
     /**Donne la note d'un trimestre sp�cifique
      * @param int pour trimestre voulu
      * @throws error de numero de trimestre*/
-    public double donneNotePourUnTrimestre(int trimestre) {
-        if(trimestre<1 || trimestre >3 )throw new Error("Ce n'est pas un trimestre valide");
-        return notesFinales[trimestre-1];
+    public void  donneNotePourUnTrimestre(int trimestre,double note) {
+       nTrimestreTravaux[trimestre]=note;
     }
 
     public double getMoyenne(int trimestre) {
@@ -149,16 +120,16 @@ public class Eleve  implements Comparable<Eleve>, Serializable{
         return nom + " " + prenom;
     }
 
-    public void augmenteParticipation() {noteParticipation++;
+    public void augmenteParticipation(int trimestre) {nParti[trimestre]++;
     }
 
-    public void augmenteComportement() {noteComportement++;
+    public void augmenteComportement(int trimestr) {nCompor[trimestre]++;
     }
 
-    public void diminueParticipation() {noteParticipation--;
+    public void diminueParticipation(int trimestr) {nParti[trimestre]--;
     }
 
-    public void diminueComportement() {
-        noteComportement--;
+    public void diminueComportement(int trimestr) {
+        nCompor[trimestre]--;
     }
 }

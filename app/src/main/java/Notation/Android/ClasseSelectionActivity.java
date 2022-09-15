@@ -3,6 +3,7 @@ package Notation.Android;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -14,6 +15,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -31,7 +34,10 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classe_selection);
         try {
-            xlsReader();
+            if(DataHandler.freshStart())
+                    xlsReader();
+            else
+                loadClasses();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,5 +100,19 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
         //TODO faire le passage des classe S à classe
         notationActivity.putExtra("button_message",b.getText());
         startActivity(notationActivity);
+    }
+    private void loadClasses() throws FileNotFoundException {
+       DataHandler dh = new DataHandler();
+       File[] file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).listFiles();
+       for(int i =0;i<file.length;i++){
+           if(file[i].getName().contains("serialized_"))
+           {
+               String tmp=file[i].getName();
+               String[] s= tmp.split("_");
+               classes.add(dh.classeFromFile(s[1]));
+               createButtonDynamicly(s[1]);
+           }
+       }
+
     }
 }
