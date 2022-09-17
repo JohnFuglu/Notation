@@ -3,7 +3,6 @@ package Notation.Android;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -28,13 +27,13 @@ import CoreStructure.DataHandler;
 import CoreStructure.Eleve;
 
 public class ClasseSelectionActivity extends AppCompatActivity implements View.OnClickListener {
-    private HashSet<Classe> classes = new HashSet<>();
+    private final HashSet<Classe> classes = new HashSet<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classe_selection);
         try {
-            if(DataHandler.freshStart())
+           if(DataHandler.freshStart())
                     xlsReader();
             else
                 loadClasses();
@@ -68,13 +67,14 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
                         while(cellIterator.hasNext()){
                             Cell cell = cellIterator.next();
                             if(!cell.getStringCellValue().isEmpty())
-                            set.add(cell.getStringCellValue());
+                                 set.add(cell.getStringCellValue());
                         }
                  }
                 createButtonDynamicly(sheet.getSheetName());
                 classes.add(createClasse(set,sheet.getSheetName()));
-                saveClassesData(classes);
+
             }
+            saveClassesData(classes);
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -91,25 +91,24 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
     }
     protected void saveClassesData(HashSet<Classe> classesHashset){
         DataHandler dataHandler =new DataHandler();
-        dataHandler.saveClasses(classesHashset);
+        dataHandler.saveClasses(classesHashset,getApplicationContext());
     }
     @Override
     public void onClick(View v) {
         Intent notationActivity = new Intent(ClasseSelectionActivity.this, MainActivity.class);
         Button b = (Button)v;
-        //TODO faire le passage des classe S à classe
         notationActivity.putExtra("button_message",b.getText());
         startActivity(notationActivity);
     }
     private void loadClasses() throws FileNotFoundException {
        DataHandler dh = new DataHandler();
-       File[] file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).listFiles();
+       File[] file =getFilesDir().listFiles();
        for(int i =0;i<file.length;i++){
            if(file[i].getName().contains("serialized_"))
            {
                String tmp=file[i].getName();
                String[] s= tmp.split("_");
-               classes.add(dh.classeFromFile(s[1]));
+               classes.add(dh.classeFromFile(s[1],getApplicationContext()));
                createButtonDynamicly(s[1]);
            }
        }

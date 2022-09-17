@@ -1,5 +1,6 @@
 package Notation.Android;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -37,35 +38,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         String classeToFetch   = intent.getStringExtra("button_message");
-
         try {
             DataHandler dataHandler = new DataHandler();
-            classe =dataHandler.classeFromFile(classeToFetch);
+            classe =dataHandler.classeFromFile(classeToFetch,getApplicationContext());
 
             for(int i =0;i<classe.getClasseListEleves().size();i++){
                 String s = classe.getClasseListEleves().get(i).getnomPrenom();
                 createButtonDynamicly(s);
             }
 
-        }catch (FileNotFoundException e) {
-            try {
-                classe = new Classe("CP");//TODO soit ouverture fichier, vient d'une activité où on a choisi la classe
-            } catch (IOException e2) {
-                e.printStackTrace();
-            }
-            try {
-                createEleve(xlsReader());
-
-
-                for(int i =0;i<classe.getClasseListEleves().size();i++){
-                    String s = classe.getClasseListEleves().get(i).getnomPrenom();
-                    createButtonDynamicly(s);
-                }
-
-            } catch (IOException e2) {
-                e.printStackTrace();
-            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+
+
         TextView intitulle = findViewById(R.id.classe_nom);
         intitulle.setText(classe.getNomClasse());
         creerDevoir = findViewById(R.id.creerDevoir_button);
@@ -110,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Eleve e = new Eleve(s, classe);
             classe.addEleve(e);
         }
-            saveData(classe);
+            saveData(classe,getApplicationContext());
     }
     protected void createButtonDynamicly(String name){
         Button button = new Button(this);
@@ -131,9 +117,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         notationActivity.putExtra("button_message2",classe.getNomClasse());
         startActivity(notationActivity);
     }
-    protected void saveData(Classe c){
+    protected void saveData(Classe c, Context context){
         DataHandler dataHandler =new DataHandler();
-        dataHandler.createSerializedClasse(c);
+        dataHandler.createSerializedClasse(c,context);
     }
     //TODO rassembler les chargements ici
     private void persistentDataUpdate(){}

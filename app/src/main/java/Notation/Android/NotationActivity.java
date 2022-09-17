@@ -211,7 +211,7 @@ public class NotationActivity extends AppCompatActivity {
                 majDesTextes();
                 classe.updateClasse(eleve);
               DataHandler dh = new DataHandler();
-              dh.createSerializedClasse(classe);
+              dh.createSerializedClasse(classe,getApplicationContext());
             }
         });
     }
@@ -222,7 +222,7 @@ public class NotationActivity extends AppCompatActivity {
         nomView.setText(nomEleve);
         String nomClasse= intent.getStringExtra("button_message2");
         classeView.setText( nomClasse);
-        classe = dataHandler.classeFromFile(nomClasse);
+        classe = dataHandler.classeFromFile(nomClasse,getApplicationContext());
         eleve= dataHandler.getEleveFromFile(nomEleve,classe);
     }
 

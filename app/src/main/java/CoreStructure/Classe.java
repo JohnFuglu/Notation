@@ -19,6 +19,8 @@ public class Classe implements Serializable {
     public ArrayList<Devoir> getDevoirDonnes() {
         return devoirDonnes;
     }
+    /**Est ce que le devoir existe déjà
+     * @return boolean **/
     public boolean devoirPresent(Devoir d){
        for(int i=0;i<devoirDonnes.size();i++){
            if(devoirDonnes.get(i).getIntitulle().equals(d.getIntitulle()))
@@ -28,8 +30,10 @@ public class Classe implements Serializable {
     }
     private ArrayList<Devoir> devoirDonnes=new ArrayList<>();
     public void ajouterUnDevoir(Devoir d){
-        if(!devoirPresent(d))
-            devoirDonnes.add(d);
+        if(devoirPresent(d))
+            deleteDevoir(d);
+
+        devoirDonnes.add(d);
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     public	Classe (String nomClasse) throws IOException {
@@ -43,7 +47,9 @@ public class Classe implements Serializable {
 
     public String getNomClasse() {return this.nomClasse;}
     public void setNomClasse(String nom){this.nomClasse=nom;}
-    /**Va chercher un �l�ve dans la classe*/
+    /**Va chercher un élève  dans la classe
+     * @param  nomPrenom
+     * @return Eleve choisi*/
     public Eleve getEleve(String nomPrenom) {
         Iterator<Eleve> iterator =  classEleves.iterator();
         while(iterator.hasNext()) {
@@ -93,12 +99,15 @@ public class Classe implements Serializable {
        }
    }
 
-    public Devoir getDevoir(String intitule) {
-        for (Devoir d :devoirDonnes
-             ) {
-            if(d.getIntitulle().equals(intitule))
-                return d;
-        }
+    public Devoir getDevoir(String intitulle) {
+        for(Devoir d : devoirDonnes ){
+            if(intitulle.equals(d.getIntitulle()))
+                return d;}
         return null;
+    }
+
+    public void deleteDevoir(Devoir devoir){
+        if(devoirPresent(devoir))
+                devoirDonnes.remove(devoir);
     }
 }
