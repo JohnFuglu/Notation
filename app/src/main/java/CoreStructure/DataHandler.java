@@ -1,6 +1,5 @@
 package CoreStructure;
 
-import android.content.Context;
 import android.os.Environment;
 
 import java.io.File;
@@ -17,11 +16,11 @@ import java.util.Iterator;
 public class DataHandler {
 
 
-    public void createSerializedClasse(Classe classe, Context context){
+    public void createSerializedClasse(Classe classe){
         FileOutputStream fileOutputStream=null;
         ObjectOutputStream objectOutputStream=null;
         try{
-            File file = new File(context.getFilesDir(),"serialized_"+classe.getNomClasse());
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"serialized_"+classe.getNomClasse());
             fileOutputStream=new FileOutputStream(file);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(classe);
@@ -36,12 +35,12 @@ public class DataHandler {
         }
     }
 
-    public Classe classeFromFile(String nomClasse, Context context)throws FileNotFoundException{
+    public Classe classeFromFile(String nomClasse)throws FileNotFoundException{
         FileInputStream fileInputStream=null;
         ObjectInputStream objectInputStream=null;
         Classe c = new Classe();
         try{
-            File file = new File(context.getFilesDir(),"serialized_"+nomClasse);
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"serialized_"+nomClasse);
             fileInputStream=new FileInputStream(file);
             objectInputStream = new ObjectInputStream(fileInputStream);
             c= (Classe) objectInputStream.readObject();
@@ -56,13 +55,13 @@ public class DataHandler {
         }
         return c;
     }
-    public void saveClasses(HashSet<Classe> set, Context context){
+    public void saveClasses(HashSet<Classe> set){
         for (Classe cl : set) {
             FileOutputStream fileOutputStream=null;
             ObjectOutputStream objectOutputStream=null;
         try{
-            File file = new File(context.getFilesDir(),"serialized_"+cl.getNomClasse());
-            fileOutputStream=new FileOutputStream(file,false);
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"serialized_"+cl.getNomClasse());
+            fileOutputStream=new FileOutputStream(file);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(cl);
             fileOutputStream.flush();
@@ -85,18 +84,11 @@ public class DataHandler {
         }
         return null;
     }
-    public void sauverDevoirs(ArrayList a,Classe classe){
+    public void sauverDevoirs(ArrayList a){
         FileOutputStream fileOutputStream=null;
         ObjectOutputStream objectOutputStream=null;
         try{
-            File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-            String fileName = folder.getPath() + "/Devoirs";
-            File file = new File(fileName);
-            if(file.exists()){
-                file.delete();
-            }
-
-            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Devoirs");
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Devoirs");
             fileOutputStream=new FileOutputStream(file);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(a);
@@ -120,21 +112,13 @@ public class DataHandler {
         return null;
     }
     //TODO faire une methode pour le chargment repetitif
-    public void majClasse(Classe c, Context context) throws FileNotFoundException {
-        createSerializedClasse(c,context);
+    public void majClasse(Classe c) throws FileNotFoundException {
+        createSerializedClasse(c);
     }
 
     public static boolean freshStart(){
-        if(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).listFiles().length >0)
+        if(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).listFiles().length>0)
             return false;
         else return true;
-    }
-
-    public static void deleteFile(String name){
-        File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        String fileName = folder.getPath() + "/"+name;
-        File file = new File(fileName);
-        if(file.exists())
-            file.delete();
     }
 }

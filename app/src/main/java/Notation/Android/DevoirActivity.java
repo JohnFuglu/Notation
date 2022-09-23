@@ -131,8 +131,10 @@ public class DevoirActivity extends AppCompatActivity {
                intitulle=s.toString();
             }
         });
+
+
         date=findViewById(R.id.date_print);
-        setDate(date);
+       setDate(date);
         TBText = findViewById(R.id.TbReussi_Text);
         BText= findViewById(R.id.BReussi_Text);
         MoyText= findViewById(R.id.MoyReussi_Text);
@@ -206,9 +208,9 @@ public class DevoirActivity extends AppCompatActivity {
     public void sauverDevoir() throws FileNotFoundException {
         rempliDevoir();
         DataHandler dh = new DataHandler();
-        classe= dh.classeFromFile(classeNom,getApplicationContext());
+        classe= dh.classeFromFile(classeNom);
         classe.ajouterUnDevoir(devoir);
-        dh.majClasse(classe,getApplicationContext());
+        dh.majClasse(classe);
     }
     private void rempliDevoir(){
         devoir = new Devoir(intitulle," ",(String) date.getText());
