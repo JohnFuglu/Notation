@@ -24,15 +24,15 @@ import CoreStructure.DataHandler;
 import CoreStructure.Eleve;
 
 public class NotationActivity extends AppCompatActivity {
-    private TextView nomView,classeView;
-    EditText appreciationText,noteTravaux,noteTrimestre;
-    private TextView compNumber,partNumber;
-    private Classe classe;
     protected Eleve eleve;
-    private  DataHandler dataHandler;
-    private int trimestre;
+    EditText appreciationText, noteTravaux, noteTrimestre;
+    private TextView nomView, classeView;
+    private TextView compNumber, partNumber;
+    private Classe classe;
+    private DataHandler dataHandler;
+    private int trimestre = 0;
     private String appreciation;
-    private double travaux,trimestreNote;
+    private double travaux, trimestreNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +45,20 @@ public class NotationActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-       spinnerDevoirs();
-      spinnerTrimestre();
-}
+        spinnerDevoirs();
+        spinnerTrimestre();
+    }
 
-    private void spinnerTrimestre(){
+    private void spinnerTrimestre() {
         Spinner trimestreSpinner = findViewById(R.id.choix_trimestre);
-        ArrayAdapter<CharSequence> adapterTri =  ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adapterTri = ArrayAdapter.createFromResource(this,
                 R.array.Trimestres, android.R.layout.simple_spinner_item);
         trimestreSpinner.setAdapter(adapterTri);
         trimestreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    trimestre= getTrimestreNbr(parent.getItemAtPosition(position).toString());
+                    trimestre = getTrimestreNbr(parent.getItemAtPosition(position).toString()) - 1;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -70,23 +70,27 @@ public class NotationActivity extends AppCompatActivity {
             }
         });
     }
-    private double parseStringDouble(String s){
-        StringTokenizer st = new StringTokenizer(s);  double t=0;
+
+    private double parseStringDouble(String s) {
+        StringTokenizer st = new StringTokenizer(s);
+        double t = 0;
         while (st.hasMoreTokens()) {
             if (st.nextToken().equals(Double.class))
                 t = Double.parseDouble(st.toString());
         }
         return t;
     }
+
     private int getTrimestreNbr(String s) throws IOException {
-        return Integer.parseInt(String.valueOf(s.charAt(s.length()-1)));
+        return Integer.parseInt(String.valueOf(s.charAt(s.length() - 1)));
     }
-    private void spinnerDevoirs(){
+
+    private void spinnerDevoirs() {
         Spinner devoirSpinner = findViewById(R.id.choix_devoir);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
         adapter.add("aucun");
-        for(int i =0;i<classe.getDevoirDonnes().size();i++){
-           adapter.add(classe.getDevoirDonnes().get(i).getIntitulle());
+        for (int i = 0; i < classe.getDevoirDonnes().size(); i++) {
+            adapter.add(classe.getDevoirDonnes().get(i).getIntitulle());
         }
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -94,13 +98,13 @@ public class NotationActivity extends AppCompatActivity {
         devoirSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-             if(!parent.getItemAtPosition(position).toString().equals("aucun")) {
-                    Intent evalDevoirAct = new Intent(NotationActivity.this,EvalDevoirActivity.class);
-                    evalDevoirAct.putExtra("Classe",classe.getNomClasse());
-                    evalDevoirAct.putExtra("Intitule",parent.getItemAtPosition(position).toString());
-                    evalDevoirAct.putExtra("eleve_nom",eleve.getnomPrenom());
+                if (!parent.getItemAtPosition(position).toString().equals("aucun")) {
+                    Intent evalDevoirAct = new Intent(NotationActivity.this, EvalDevoirActivity.class);
+                    evalDevoirAct.putExtra("Classe", classe.getNomClasse());
+                    evalDevoirAct.putExtra("Intitule", parent.getItemAtPosition(position).toString());
+                    evalDevoirAct.putExtra("eleve_nom", eleve.getnomPrenom());
                     startActivity(evalDevoirAct);
-               }
+                }
             }
 
             @Override
@@ -109,25 +113,29 @@ public class NotationActivity extends AppCompatActivity {
             }
         });
     }
-    private void majDesTextes(){
-        eleve.addAppreciation(appreciation,trimestre);
-        eleve.donneNotePourUnTrimestre(trimestre,trimestreNote);
-        eleve.noterTravaux(trimestre,travaux);
-    }
-    private void setUI() throws FileNotFoundException {
-        Intent intent =getIntent();
-        nomView=findViewById(R.id.nom_view);
-        classeView=findViewById(R.id.classe_view);
-        String nomEleve =  intent.getStringExtra("Nom_Eleve");
-        nomView.setText(nomEleve);
-        String nomClasse= intent.getStringExtra("Classe_Name");
-        classeView.setText( nomClasse);
-        classe = dataHandler.classeFromFile(nomClasse);
-        eleve= classe.getEleve(nomEleve);
 
-        appreciationText=findViewById(R.id.Appreciation_Text);
-        noteTravaux=findViewById(R.id.noteTra_nbr);
-        noteTrimestre=findViewById(R.id.noteTri_nbr);
+    private void majDesTextes() {
+        eleve.addAppreciation(appreciation, trimestre);
+        eleve.donneNotePourUnTrimestre(trimestre, trimestreNote);
+        eleve.noterTravaux(trimestre, travaux);
+    }
+
+    private void setUI() throws FileNotFoundException {
+        //PAR DEFAUT TRIMESTRE = 0
+
+        Intent intent = getIntent();
+        nomView = findViewById(R.id.nom_view);
+        classeView = findViewById(R.id.classe_view);
+        String nomEleve = intent.getStringExtra("Nom_Eleve");
+        nomView.setText(nomEleve);
+        String nomClasse = intent.getStringExtra("Classe_Name");
+        classeView.setText(nomClasse);
+        classe = dataHandler.classeFromFile(nomClasse);
+        eleve = classe.getEleve(nomEleve);
+
+        appreciationText = findViewById(R.id.Appreciation_Text);
+        noteTravaux = findViewById(R.id.noteTra_nbr);
+        noteTrimestre = findViewById(R.id.noteTri_nbr);
 
         noteTravaux.addTextChangedListener(new TextWatcher() {
             @Override
@@ -142,11 +150,11 @@ public class NotationActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String tmp =s.toString();
-                try{
-                    travaux =parseStringDouble(tmp);
-                }catch (Exception e){
-                    Toast.makeText(getBaseContext(),"Erreur de parse",Toast.LENGTH_LONG).show();
+                String tmp = s.toString();
+                try {
+                    travaux = parseStringDouble(tmp);
+                } catch (Exception e) {
+                    Toast.makeText(getBaseContext(), "Erreur de parse", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -163,8 +171,8 @@ public class NotationActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String tmp =s.toString();
-                trimestreNote =parseStringDouble(tmp);
+                String tmp = s.toString();
+                trimestreNote = parseStringDouble(tmp);
             }
         });
         appreciationText.setText(eleve.getAppreciation(trimestre));
@@ -184,8 +192,8 @@ public class NotationActivity extends AppCompatActivity {
                 appreciation = s.toString();
             }
         });
-        compNumber=findViewById(R.id.comport_number);
-        partNumber=findViewById(R.id.partici_number);
+        compNumber = findViewById(R.id.comport_number);
+        partNumber = findViewById(R.id.partici_number);
         compNumber.setText(Short.toString(eleve.getNoteComportement(trimestre)));
         partNumber.setText(Short.toString(eleve.getNoteParticipation(trimestre)));
         Button saveButton = findViewById(R.id.Sauver_Button);
@@ -196,29 +204,41 @@ public class NotationActivity extends AppCompatActivity {
         compMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eleve.diminueComportement(trimestre);
-                compNumber.setText(Short.toString(eleve.getNoteComportement(trimestre)));
+                if (eleve.getNoteComportement(trimestre) > 0) {
+                    eleve.diminueComportement(trimestre);
+                    short t = eleve.getNoteComportement(trimestre);
+                    compNumber.setText(Short.toString(t));
+                }
             }
         });
         compPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eleve.augmenteComportement(trimestre);
-                partNumber.setText(Short.toString(eleve.getNoteComportement(trimestre)));
+                if (eleve.getNoteComportement(trimestre) < 5) {
+                    eleve.augmenteComportement(trimestre);
+                    short t = eleve.getNoteComportement(trimestre);
+                    compNumber.setText(Short.toString(t));
+                }
             }
         });
         partMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eleve.diminueParticipation(trimestre);
-                compNumber.setText(Short.toString(eleve.getNoteParticipation(trimestre)));
+                if (eleve.getNoteComportement(trimestre) > 0) {
+                    eleve.diminueParticipation(trimestre);
+                    short t = eleve.getNoteParticipation(trimestre);
+                    partNumber.setText(Short.toString(t));
+                }
             }
         });
         partPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eleve.augmenteParticipation(trimestre);
-                partNumber.setText(Short.toString(eleve.getNoteParticipation(trimestre)));
+                if (eleve.getNoteComportement(trimestre) < 5) {
+                    eleve.augmenteParticipation(trimestre);
+                    short t = eleve.getNoteParticipation(trimestre);
+                    partNumber.setText(Short.toString(t));
+                }
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -227,12 +247,13 @@ public class NotationActivity extends AppCompatActivity {
                 majDesTextes();
                 classe.updateClasse(eleve);
                 dataHandler.createSerializedClasse(classe);
+                finish();
             }
         });
     }
 
-    protected void boutonsGris(){
-    //TODO bouton gris
+    protected void boutonsGris() {
+        //TODO bouton gris
     }
 
 }

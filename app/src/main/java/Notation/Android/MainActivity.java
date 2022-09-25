@@ -3,8 +3,11 @@ package Notation.Android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,47 +16,87 @@ import java.io.FileNotFoundException;
 
 import CoreStructure.Classe;
 import CoreStructure.DataHandler;
+import CoreStructure.Devoir;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     private Classe classe;
-    private Button creerDevoir;
-    private   DataHandler dataHandler;
+    private Button creerDevoir, genererEvals;
+    private DataHandler dataHandler;
+    private Devoir d;
 
-//    @Override
+    //    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        String classeToFetch   = intent.getStringExtra("nom_classe");
+        String classeToFetch = intent.getStringExtra("nom_classe");
+        genererEvals = findViewById(R.id.generer_Evals_Button);
 
+        creerDevoir = findViewById(R.id.creerDevoir_button);
+        TextView intitulle = findViewById(R.id.classe_nom);
         try {
             dataHandler = new DataHandler(getBaseContext());
-            classe =dataHandler.classeFromFile(classeToFetch);
+            classe = dataHandler.classeFromFile(classeToFetch);
 
-            for(int i =0;i<classe.getClasseListEleves().size();i++){
+            for (int i = 0; i < classe.getClasseListEleves().size(); i++) {
                 String s = classe.getClasseListEleves().get(i).getnomPrenom();
                 createButtonDynamicly(s);
             }
 
-        }catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
 
         }
-        TextView intitulle = findViewById(R.id.classe_nom);
+        spinnerDevoirs();
+
+
         intitulle.setText(classe.getNomClasse());
-        creerDevoir = findViewById(R.id.creerDevoir_button);
+
         creerDevoir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Button b = (Button) v;
-                Intent devoirAct = new Intent(MainActivity.this,DevoirActivity.class);
-                devoirAct.putExtra("Classe_Name",classe.getNomClasse());
+                Intent devoirAct = new Intent(MainActivity.this, DevoirActivity.class);
+                devoirAct.putExtra("Classe_Name", classe.getNomClasse());
                 startActivity(devoirAct);
+            }
+        });
+
+        genererEvals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (d != null)
+                    dataHandler.genererEvalTxt(classe, d);
+            }
+        });
+
+    }
+
+    private void spinnerDevoirs() {
+        Spinner devoirs = findViewById(R.id.Devoir_Selection);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapter.add("aucun");
+        for (int i = 0; i < classe.getDevoirDonnes().size(); i++) {
+            adapter.add(classe.getDevoirDonnes().get(i).getIntitulle());
+        }
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        devoirs.setAdapter(adapter);
+        devoirs.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!parent.getItemAtPosition(position).toString().equals("aucun")) {
+                    d = classe.getDevoir(parent.getItemAtPosition(position).toString());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
 
-
-    protected void createButtonDynamicly(String name){
+    protected void createButtonDynamicly(String name) {
         Button button = new Button(this);
         int currId = 1000;
         button.setId(currId++);
@@ -64,9 +107,9 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent notationActivity = new Intent(MainActivity.this, NotationActivity.class);
-                Button b = (Button)v;
-                notationActivity.putExtra("Nom_Eleve",b.getText());
-                notationActivity.putExtra("Classe_Name",classe.getNomClasse());
+                Button b = (Button) v;
+                notationActivity.putExtra("Nom_Eleve", b.getText());
+                notationActivity.putExtra("Classe_Name", classe.getNomClasse());
                 startActivity(notationActivity);
             }
         });

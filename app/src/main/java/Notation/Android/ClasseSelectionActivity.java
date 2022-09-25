@@ -33,24 +33,26 @@ import CoreStructure.Eleve;
 public class ClasseSelectionActivity extends AppCompatActivity implements View.OnClickListener {
     private final HashSet<Classe> classes = new HashSet<>();
     private DataHandler dh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classe_selection);
-       try {
-                dh=new DataHandler(getApplicationContext());
-               if(getFilesDir().listFiles().length==0){
-                    Toast.makeText(this,"XLS",Toast.LENGTH_SHORT).show();
-                     xlsReader();
-               }
-                else{
-                   Toast.makeText(this,"LOAD",Toast.LENGTH_SHORT).show();
-                    loadClasses();}
+        try {
+            dh = new DataHandler(getApplicationContext());
+            if (getFilesDir().listFiles().length == 0) {
+                Toast.makeText(this, "XLS", Toast.LENGTH_SHORT).show();
+                xlsReader();
+            } else {
+                Toast.makeText(this, "LOAD", Toast.LENGTH_SHORT).show();
+                loadClasses();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    protected void createButtonDynamicly(String name){
+
+    protected void createButtonDynamicly(String name) {
         Button button = new Button(this);
         int currId = 1000;
         button.setId(currId++);
@@ -60,37 +62,38 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
         button.setOnClickListener(this);
         lin.addView(button);
     }
+
     @SuppressLint("SuspiciousIndentation")
     protected void xlsReader() throws IOException {
 
-        try{
-            final AssetManager as= getBaseContext().getAssets();
+        try {
+            final AssetManager as = getBaseContext().getAssets();
             InputStream file = as.open("Classes.xls");
-            HSSFWorkbook workbook = new  HSSFWorkbook(file);
-            for(int i=0;i<workbook.getNumberOfSheets();i++){
+            HSSFWorkbook workbook = new HSSFWorkbook(file);
+            for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
                 Set<String> set = new HashSet<>();
-                HSSFSheet sheet =workbook.getSheetAt(i);
+                HSSFSheet sheet = workbook.getSheetAt(i);
                 Iterator<Row> rowIterator = sheet.rowIterator();
-                while(rowIterator.hasNext()){
+                while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
-                    Iterator<Cell> cellIterator= row.cellIterator();
-                        while(cellIterator.hasNext()){
-                            Cell cell = cellIterator.next();
-                            if(!cell.getStringCellValue().isEmpty())
+                    Iterator<Cell> cellIterator = row.cellIterator();
+                    while (cellIterator.hasNext()) {
+                        Cell cell = cellIterator.next();
+                        if (!cell.getStringCellValue().isEmpty())
                             set.add(cell.getStringCellValue());
-                        }
-                 }
+                    }
+                }
                 createButtonDynamicly(sheet.getSheetName());
-                classes.add(createClasse(set,sheet.getSheetName()));
+                classes.add(createClasse(set, sheet.getSheetName()));
 
             }
             saveClassesData(classes);
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    protected Classe createClasse(Set<String> set,String name) throws IOException {
+
+    protected Classe createClasse(Set<String> set, String name) throws IOException {
         Classe c = new Classe(name);
         for (String s : set) {
             Eleve e = new Eleve(s, c);
@@ -99,42 +102,44 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
         return c;
 
     }
-    protected void saveClassesData(HashSet<Classe> classesHashset){
-        for (Classe c :classes ) {
+
+    protected void saveClassesData(HashSet<Classe> classesHashset) {
+        for (Classe c : classes) {
             dh.createSerializedClasse(c);
         }
-        Toast.makeText(getBaseContext(),"Save to "+getBaseContext().getFilesDir(),Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Save to " + getBaseContext().getFilesDir(), Toast.LENGTH_LONG).show();
     }
+
     @Override
     public void onClick(View v) {
         Intent notationActivity = new Intent(ClasseSelectionActivity.this, MainActivity.class);
-        Button b = (Button)v;
-        notationActivity.putExtra("nom_classe",b.getText());
+        Button b = (Button) v;
+        notationActivity.putExtra("nom_classe", b.getText());
         startActivity(notationActivity);
     }
+
     private void loadClasses() throws FileNotFoundException {
-       File[] file = getBaseContext().getFilesDir().listFiles();
-        ArrayList<File> ar= new ArrayList<>();
-       for (File f:file) {
+        File[] file = getBaseContext().getFilesDir().listFiles();
+        ArrayList<File> ar = new ArrayList<>();
+        for (File f : file) {
             ar.add(f);
         }
-       ar.sort(new Comparator<File>() {
-           @Override
-           public int compare(File o1, File o2) {
-               if(01<02)
-               return 1;
-             return 0;
-           }
-       });
-       for(int i =0;i<file.length;i++){
-           if(file[i].getName().contains("serialized_"))
-           {
-               String tmp=file[i].getName();
-               String[] s= tmp.split("_");
-               classes.add(dh.classeFromFile(s[1]));
-               createButtonDynamicly(s[1]);
-           }
-       }
+        ar.sort(new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                if (01 < 02)
+                    return 1;
+                return 0;
+            }
+        });
+        for (int i = 0; i < file.length; i++) {
+            if (file[i].getName().contains("serialized_")) {
+                String tmp = file[i].getName();
+                String[] s = tmp.split("_");
+                classes.add(dh.classeFromFile(s[1]));
+                createButtonDynamicly(s[1]);
+            }
+        }
 
     }
 }
