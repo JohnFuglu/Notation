@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 
 public class TabVersEleve {
     //TODO mettre un tri avec les majuscules = cas des noms composés
@@ -15,8 +16,8 @@ public class TabVersEleve {
         String line="";
         String spliter=";";
         Eleve e ;
-       String path = Environment.DIRECTORY_DOCUMENTS.toString();
-        BufferedReader buff=new BufferedReader(new InputStreamReader(new FileInputStream(""),"UTF-8"));
+       String path = Environment.DIRECTORY_DOCUMENTS;
+        BufferedReader buff=new BufferedReader(new InputStreamReader(new FileInputStream(""), StandardCharsets.UTF_8));
         short s=0 ;
         while((line=buff.readLine()) != null) {
             String[]eleve= line.split(spliter);

@@ -15,12 +15,12 @@ import java.util.HashMap;
 
 public class Devoir implements Serializable {
     private String intitulle;
-    private String consigne;
-    private String dateDevoir;
+    private final String consigne;
+    private final String dateDevoir;
     private String remarques;
-    private String[] critereStrings=new String[4];
+    private final String[] critereStrings=new String[4];
 
-    private HashMap<String, Smileys> grilleEval=new HashMap<>();
+    private final HashMap<String, Smileys> grilleEval=new HashMap<>();
     ArrayList<Competence>competencesEvalues=new ArrayList<>();
     ArrayList<String>competencesEvaluesString=new ArrayList<>();
 

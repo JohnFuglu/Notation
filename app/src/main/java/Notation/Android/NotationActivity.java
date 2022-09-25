@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,78 +29,24 @@ public class NotationActivity extends AppCompatActivity {
     private TextView compNumber,partNumber;
     private Classe classe;
     protected Eleve eleve;
-    private final DataHandler dataHandler = new DataHandler();
+    private  DataHandler dataHandler;
     private int trimestre;
     private String appreciation;
     private double travaux,trimestreNote;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notation);
-
-        nomView=findViewById(R.id.nom_view);
-        classeView=findViewById(R.id.classe_view);
-        appreciationText=findViewById(R.id.Appreciation_Text);
-        noteTravaux=findViewById(R.id.noteTra_nbr);
-        noteTrimestre=findViewById(R.id.noteTri_nbr);
-        noteTravaux.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String tmp =s.toString();
-                        travaux =parseStringDouble(tmp);
-            }
-        });
-        noteTrimestre.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String tmp =s.toString();
-                trimestreNote =parseStringDouble(tmp);
-            }
-        });
-        appreciationText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                    appreciation = s.toString();
-            }
-        });
+        dataHandler = new DataHandler(getBaseContext());
         try {
-            affichageEleve();
+            setUI();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        createButtons();
-        spinnerDevoirs();
-        spinnerTrimestre();
+
+       spinnerDevoirs();
+      spinnerTrimestre();
 }
 
     private void spinnerTrimestre(){
@@ -111,7 +58,7 @@ public class NotationActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    trimestre= parseString(parent.getItemAtPosition(position).toString());
+                    trimestre= getTrimestreNbr(parent.getItemAtPosition(position).toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -131,13 +78,13 @@ public class NotationActivity extends AppCompatActivity {
         }
         return t;
     }
-    private int parseString(String s) throws IOException {
+    private int getTrimestreNbr(String s) throws IOException {
         return Integer.parseInt(String.valueOf(s.charAt(s.length()-1)));
     }
     private void spinnerDevoirs(){
         Spinner devoirSpinner = findViewById(R.id.choix_devoir);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
-       adapter.add("aucun");
+        adapter.add("aucun");
         for(int i =0;i<classe.getDevoirDonnes().size();i++){
            adapter.add(classe.getDevoirDonnes().get(i).getIntitulle());
         }
@@ -163,11 +110,80 @@ public class NotationActivity extends AppCompatActivity {
         });
     }
     private void majDesTextes(){
-        eleve.addAppreciation(appreciation,trimestre-1);
+        eleve.addAppreciation(appreciation,trimestre);
         eleve.donneNotePourUnTrimestre(trimestre,trimestreNote);
         eleve.noterTravaux(trimestre,travaux);
     }
-    private void createButtons() {
+    private void setUI() throws FileNotFoundException {
+        Intent intent =getIntent();
+        nomView=findViewById(R.id.nom_view);
+        classeView=findViewById(R.id.classe_view);
+        String nomEleve =  intent.getStringExtra("Nom_Eleve");
+        nomView.setText(nomEleve);
+        String nomClasse= intent.getStringExtra("Classe_Name");
+        classeView.setText( nomClasse);
+        classe = dataHandler.classeFromFile(nomClasse);
+        eleve= classe.getEleve(nomEleve);
+
+        appreciationText=findViewById(R.id.Appreciation_Text);
+        noteTravaux=findViewById(R.id.noteTra_nbr);
+        noteTrimestre=findViewById(R.id.noteTri_nbr);
+
+        noteTravaux.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String tmp =s.toString();
+                try{
+                    travaux =parseStringDouble(tmp);
+                }catch (Exception e){
+                    Toast.makeText(getBaseContext(),"Erreur de parse",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        noteTrimestre.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String tmp =s.toString();
+                trimestreNote =parseStringDouble(tmp);
+            }
+        });
+        appreciationText.setText(eleve.getAppreciation(trimestre));
+        appreciationText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                appreciation = s.toString();
+            }
+        });
         compNumber=findViewById(R.id.comport_number);
         partNumber=findViewById(R.id.partici_number);
         compNumber.setText(Short.toString(eleve.getNoteComportement(trimestre)));
@@ -210,20 +226,9 @@ public class NotationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 majDesTextes();
                 classe.updateClasse(eleve);
-              DataHandler dh = new DataHandler();
-              dh.createSerializedClasse(classe);
+                dataHandler.createSerializedClasse(classe);
             }
         });
-    }
-
-    private void affichageEleve() throws FileNotFoundException {
-        Intent intent =getIntent();
-        String nomEleve =  intent.getStringExtra("button_message");
-        nomView.setText(nomEleve);
-        String nomClasse= intent.getStringExtra("button_message2");
-        classeView.setText( nomClasse);
-        classe = dataHandler.classeFromFile(nomClasse);
-        eleve= dataHandler.getEleveFromFile(nomEleve,classe);
     }
 
     protected void boutonsGris(){

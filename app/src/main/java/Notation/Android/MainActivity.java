@@ -1,7 +1,6 @@
 package Notation.Android;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,36 +9,25 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 import CoreStructure.Classe;
 import CoreStructure.DataHandler;
-import CoreStructure.Eleve;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity{
     private Classe classe;
     private Button creerDevoir;
-
+    private   DataHandler dataHandler;
 
 //    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        String classeToFetch   = intent.getStringExtra("button_message");
+        String classeToFetch   = intent.getStringExtra("nom_classe");
 
         try {
-            DataHandler dataHandler = new DataHandler();
+            dataHandler = new DataHandler(getBaseContext());
             classe =dataHandler.classeFromFile(classeToFetch);
 
             for(int i =0;i<classe.getClasseListEleves().size();i++){
@@ -48,23 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         }catch (FileNotFoundException e) {
-            try {
-                classe = new Classe("CP");//TODO soit ouverture fichier, vient d'une activité où on a choisi la classe
-            } catch (IOException e2) {
-                e.printStackTrace();
-            }
-            try {
-                createEleve(xlsReader());
 
-
-                for(int i =0;i<classe.getClasseListEleves().size();i++){
-                    String s = classe.getClasseListEleves().get(i).getnomPrenom();
-                    createButtonDynamicly(s);
-                }
-
-            } catch (IOException e2) {
-                e.printStackTrace();
-            }
         }
         TextView intitulle = findViewById(R.id.classe_nom);
         intitulle.setText(classe.getNomClasse());
@@ -74,44 +46,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Button b = (Button) v;
                 Intent devoirAct = new Intent(MainActivity.this,DevoirActivity.class);
-                boolean estCreation=true;
-                devoirAct.putExtra("Creation_Devoir",estCreation);
                 devoirAct.putExtra("Classe_Name",classe.getNomClasse());
                 startActivity(devoirAct);
             }
         });
     }
-    protected  Set<String> xlsReader() throws IOException {
-        Set<String> set = new HashSet<>();
-        try{
-            final AssetManager as= getBaseContext().getAssets();
-            InputStream file = as.open("5e.xls");
-            HSSFWorkbook workbook = new  HSSFWorkbook(file);
-            HSSFSheet sheet =workbook.getSheetAt(0);
-            Iterator<Row> rowIterator = sheet.rowIterator();
-            while(rowIterator.hasNext()){
-                    Row row = rowIterator.next();
-                    Iterator<Cell> cellIterator= row.cellIterator();
-                    while(cellIterator.hasNext()){
-                        Cell cell = cellIterator.next();
-                        if(!cell.getStringCellValue().isEmpty())
-                            set.add(cell.getStringCellValue());
-                    }
-            }
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return set;
-    }
 
-    protected void createEleve(Set<String> set) throws IOException {
-        for (String s : set) {
-            Eleve e = new Eleve(s, classe);
-            classe.addEleve(e);
-        }
-            saveData(classe);
-    }
+
     protected void createButtonDynamicly(String name){
         Button button = new Button(this);
         int currId = 1000;
@@ -119,22 +60,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button.setText(name);
         LinearLayout lin = findViewById(R.id.classes_linearLay);
         button.setLayoutParams(lin.getLayoutParams());
-        button.setOnClickListener(this);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent notationActivity = new Intent(MainActivity.this, NotationActivity.class);
+                Button b = (Button)v;
+                notationActivity.putExtra("Nom_Eleve",b.getText());
+                notationActivity.putExtra("Classe_Name",classe.getNomClasse());
+                startActivity(notationActivity);
+            }
+        });
         lin.addView(button);
     }
-
-    @Override
-    public void onClick(View v) {
-        Intent notationActivity = new Intent(MainActivity.this, NotationActivity.class);
-        Button b = (Button)v;
-        notationActivity.putExtra("button_message",b.getText());
-        notationActivity.putExtra("button_message2",classe.getNomClasse());
-        startActivity(notationActivity);
-    }
-    protected void saveData(Classe c){
-        DataHandler dataHandler =new DataHandler();
-        dataHandler.createSerializedClasse(c);
-    }
-    //TODO rassembler les chargements ici
-    private void persistentDataUpdate(){}
 }

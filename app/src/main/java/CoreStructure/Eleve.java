@@ -17,19 +17,19 @@ import java.util.Set;
 
 public class Eleve  implements Comparable<Eleve>, Serializable{
 
-    private String nomPrenom;
+    private  String nomPrenom;
     private String prenom;
     private Classe classe;
     private String nom;
     //TEST
-    private double[] nTrimestreTravaux = new double[3];
-    private short[] nParti=new short[3];
-    private short[] nCompor =new short[3];
-    private String[] appreciations=new String[3];
-    private double[] notesFinales = new double[3];
+    private  double[] nTrimestreTravaux = new double[3];
+    private  short[] nParti=new short[3];
+    private  short[] nCompor =new short[3];
+    private  String[] appreciations=new String[3];
+    private  double[] notesFinales = new double[3];
 
-    private ArrayList<Competence> compValideArrayList = new ArrayList<Competence>();
-    private Set<Devoir> devoirsFaits=new HashSet<>();
+    private  ArrayList<Competence> compValideArrayList = new ArrayList<Competence>();
+    private  Set<Devoir> devoirsFaits=new HashSet<>();
 
     private int trimestre=0;
 
@@ -47,8 +47,9 @@ public class Eleve  implements Comparable<Eleve>, Serializable{
        nomPrenom = nomEtPrenom;
        classe=classe;
         nTrimestreTravaux[0]=0; nTrimestreTravaux[1]=0; nTrimestreTravaux[2]=0;
-        nParti[0]=5; nParti[1]=5; nParti[2]=5;
-        nCompor[0]=0; nCompor[1]=0; nCompor[2]=0;
+        nParti[0]=0; nParti[1]=0; nParti[2]=0;
+        nCompor[0]=5; nCompor[1]=5; nCompor[2]=5;
+        appreciations= new String[]{"aucune", "aucune", "aucune"};
     }
     /**Note le trimestre / 10
      * @throws error si en dehors des clous
@@ -114,6 +115,7 @@ public class Eleve  implements Comparable<Eleve>, Serializable{
     public void setNotesFinales(double note) {this.notesFinales[trimestre]=note;}
     public void addAppreciation(String appreciation, int trimestre){appreciations[trimestre]=appreciation;}
     public String[] getAppreciations() {return appreciations;}
+    public String getAppreciation(int trimestre){return appreciations[trimestre];}
 
     @Override
     public String toString() {

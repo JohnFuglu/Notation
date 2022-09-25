@@ -1,12 +1,13 @@
 package Notation.Android;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -28,16 +31,21 @@ import CoreStructure.DataHandler;
 import CoreStructure.Eleve;
 
 public class ClasseSelectionActivity extends AppCompatActivity implements View.OnClickListener {
-    private HashSet<Classe> classes = new HashSet<>();
+    private final HashSet<Classe> classes = new HashSet<>();
+    private DataHandler dh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classe_selection);
-        try {
-            if(DataHandler.freshStart())
-                    xlsReader();
-            else
-                loadClasses();
+       try {
+                dh=new DataHandler(getApplicationContext());
+               if(getFilesDir().listFiles().length==0){
+                    Toast.makeText(this,"XLS",Toast.LENGTH_SHORT).show();
+                     xlsReader();
+               }
+                else{
+                   Toast.makeText(this,"LOAD",Toast.LENGTH_SHORT).show();
+                    loadClasses();}
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,6 +60,7 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
         button.setOnClickListener(this);
         lin.addView(button);
     }
+    @SuppressLint("SuspiciousIndentation")
     protected void xlsReader() throws IOException {
 
         try{
@@ -73,8 +82,9 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
                  }
                 createButtonDynamicly(sheet.getSheetName());
                 classes.add(createClasse(set,sheet.getSheetName()));
-                saveClassesData(classes);
+
             }
+            saveClassesData(classes);
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -90,20 +100,32 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
 
     }
     protected void saveClassesData(HashSet<Classe> classesHashset){
-        DataHandler dataHandler =new DataHandler();
-        dataHandler.saveClasses(classesHashset);
+        for (Classe c :classes ) {
+            dh.createSerializedClasse(c);
+        }
+        Toast.makeText(getBaseContext(),"Save to "+getBaseContext().getFilesDir(),Toast.LENGTH_LONG).show();
     }
     @Override
     public void onClick(View v) {
         Intent notationActivity = new Intent(ClasseSelectionActivity.this, MainActivity.class);
         Button b = (Button)v;
-        //TODO faire le passage des classe S à classe
-        notationActivity.putExtra("button_message",b.getText());
+        notationActivity.putExtra("nom_classe",b.getText());
         startActivity(notationActivity);
     }
     private void loadClasses() throws FileNotFoundException {
-       DataHandler dh = new DataHandler();
-       File[] file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).listFiles();
+       File[] file = getBaseContext().getFilesDir().listFiles();
+        ArrayList<File> ar= new ArrayList<>();
+       for (File f:file) {
+            ar.add(f);
+        }
+       ar.sort(new Comparator<File>() {
+           @Override
+           public int compare(File o1, File o2) {
+               if(01<02)
+               return 1;
+             return 0;
+           }
+       });
        for(int i =0;i<file.length;i++){
            if(file[i].getName().contains("serialized_"))
            {

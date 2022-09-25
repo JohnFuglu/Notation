@@ -36,7 +36,7 @@ public class DevoirActivity extends AppCompatActivity {
     EditText TBText ,BText,MoyText,EchecText;
     private TextView date;
     private TextView intituleTv;
-    private String[] criteres=new String[4];
+    private final String[] criteres=new String[4];
 
 
     @Override
@@ -77,8 +77,8 @@ public class DevoirActivity extends AppCompatActivity {
     }
 
     private void createSpinners() {
-        competence1 = (Spinner) findViewById(R.id.compet_Spinner);
-        competence2 = (Spinner) findViewById(R.id.compet_Spinner2);
+        competence1 = findViewById(R.id.compet_Spinner);
+        competence2 = findViewById(R.id.compet_Spinner2);
         ArrayAdapter<String> adaptater = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
         adaptater.addAll(CompArtsPlast.getCompetences());
         competence1.setAdapter(adaptater);
@@ -207,7 +207,7 @@ public class DevoirActivity extends AppCompatActivity {
 
     public void sauverDevoir() throws FileNotFoundException {
         rempliDevoir();
-        DataHandler dh = new DataHandler();
+        DataHandler dh = new DataHandler(getBaseContext());
         classe= dh.classeFromFile(classeNom);
         classe.ajouterUnDevoir(devoir);
         dh.majClasse(classe);

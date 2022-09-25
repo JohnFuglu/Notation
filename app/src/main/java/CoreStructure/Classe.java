@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class Classe implements Serializable {
 
     private String nomClasse;
-    private ArrayList<Eleve> classEleves = new ArrayList<Eleve>();
+    private final ArrayList<Eleve> classEleves = new ArrayList<Eleve>();
 
     public ArrayList<Devoir> getDevoirDonnes() {
         return devoirDonnes;
@@ -26,7 +26,7 @@ public class Classe implements Serializable {
        }
         return false;
     }
-    private ArrayList<Devoir> devoirDonnes=new ArrayList<>();
+    private final ArrayList<Devoir> devoirDonnes=new ArrayList<>();
     public void ajouterUnDevoir(Devoir d){
         if(!devoirPresent(d))
             devoirDonnes.add(d);
@@ -48,7 +48,7 @@ public class Classe implements Serializable {
         Iterator<Eleve> iterator =  classEleves.iterator();
         while(iterator.hasNext()) {
             Eleve eleve;
-            eleve =(Eleve)iterator.next();
+            eleve = iterator.next();
 
             if(eleve.getnomPrenom().equals(nomPrenom))
                 return eleve;
@@ -61,7 +61,7 @@ public class Classe implements Serializable {
         Iterator<Eleve> iterator =  classEleves.iterator();
         while(iterator.hasNext()) {
             Eleve eleve;
-            eleve =(Eleve)iterator.next();
+            eleve = iterator.next();
 
             if(eleve.getPrenom().equals(prenom) && eleve.getNom().equals(nom) )
                 return eleve;
