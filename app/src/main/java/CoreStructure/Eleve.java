@@ -67,7 +67,7 @@ public class Eleve implements Comparable<Eleve>, Serializable {
     public String getEvalDevoir(Devoir d) {
         if (devoirsFaits.contains(d))
             return nomPrenom + "\n " + d.resumer();
-        else return "Devoir Absent";
+        else return nomPrenom +" :" +" Devoir Absent" + "\n";
     }
 
     /**

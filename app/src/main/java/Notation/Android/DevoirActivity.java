@@ -70,7 +70,24 @@ public class DevoirActivity extends AppCompatActivity {
     }
 
     private void prepareUi() {
+        TextView textView = findViewById(R.id.Consigne_View);
+        textView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String t = s.toString();
+                  //  devoir.setConsigne(t);
+            }
+        });
         createSpinners();
 
     }
@@ -203,6 +220,7 @@ public class DevoirActivity extends AppCompatActivity {
                 criteres[3] = s.toString();
             }
         });
+        devoir = new Devoir(intitulle, " ", (String) date.getText());
     }
 
     public void sauverDevoir() throws FileNotFoundException {
@@ -211,15 +229,17 @@ public class DevoirActivity extends AppCompatActivity {
         classe = dh.classeFromFile(classeNom);
         classe.ajouterUnDevoir(devoir);
         dh.majClasse(classe);
+        finish();
     }
 
     private void rempliDevoir() {
-        devoir = new Devoir(intitulle, " ", (String) date.getText());
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
             devoir.rempliCriteres(criteres[i], i);
         devoir.ajouteCompetenceauDevoir(comp1);
         devoir.ajouteCompetenceauDevoir(comp2);
+        devoir.setIntitulle(intitulle);
         devoir.setClasse(classeNom);
+
     }
 
 }

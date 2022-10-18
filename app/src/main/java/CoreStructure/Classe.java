@@ -68,19 +68,6 @@ public class Classe implements Serializable {
         throw new Error("L'eleve n'est pas pr�sent dans cette classe !");
     }
 
-
-    public Eleve getEleve(String nom, String prenom) {
-        Iterator<Eleve> iterator = classEleves.iterator();
-        while (iterator.hasNext()) {
-            Eleve eleve;
-            eleve = iterator.next();
-
-            if (eleve.getPrenom().equals(prenom) && eleve.getNom().equals(nom))
-                return eleve;
-        }
-        throw new Error("L'eleve n'est pas pr�sent dans cette classe !");
-    }
-
     public void addEleve(Eleve e) {
         classEleves.add(e);
     }
@@ -89,31 +76,6 @@ public class Classe implements Serializable {
         return this.classEleves;
     }
 
-    /**
-     * Donne un devoir � la classe, verif s'il existe d�j�
-     *
-     * @param devoir
-     * @throws Error si devoir d�j� donn�
-     */
-    public void donneUnDevoir(Devoir devoir) {
-        boolean ok = false;
-        for (Devoir d : devoirDonnes) {
-            if (devoir.getIntitulle() == d.getIntitulle())
-                throw new Error("Ce devoir existe d�j� dans cette classe !");
-            ok = true;
-        }
-        if (ok)
-            devoirDonnes.add(devoir);
-    }
-
-    public void updateClasse(Eleve e) {
-        for (Eleve eleve : classEleves) {
-            if (eleve.getnomPrenom() == e.getnomPrenom()) {
-                eleve = e;
-                return;
-            }
-        }
-    }
 
     public Devoir getDevoir(String intitule) {
         for (Devoir d : devoirDonnes

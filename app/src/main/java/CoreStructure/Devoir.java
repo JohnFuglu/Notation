@@ -1,7 +1,5 @@
 package CoreStructure;
 
-import android.text.Editable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,12 +13,17 @@ import java.util.HashMap;
  */
 
 public class Devoir implements Serializable {
-    private final String consigne;
+    private String consigne;
     private final String dateDevoir;
     private final String[] critereStrings = new String[4];
     private final HashMap<String, Smileys> grilleEval = new HashMap<>();
     ArrayList<Competence> competencesEvalues = new ArrayList<>();
     ArrayList<String> competencesEvaluesString = new ArrayList<>();
+
+    public void setIntitulle(String intitulle) {
+        this.intitulle = intitulle;
+    }
+
     private String intitulle;
     private String remarques;
     private String smiley;
@@ -29,10 +32,6 @@ public class Devoir implements Serializable {
         this.intitulle = intitulle;
         this.consigne = consigne;
         this.dateDevoir = dateDevoir;
-    }
-
-    public String getSmiley() {
-        return smiley;
     }
 
     public void setSmiley(String smiley) {
@@ -56,14 +55,7 @@ public class Devoir implements Serializable {
         this.remarques = remarques;
     }
 
-    /**
-     * Ajoute une competence au devoir
-     *
-     * @param comp du cycle
-     */
-    public void ajouteCompetenceauDevoir(Competence comp) {
-        competencesEvalues.add(comp);
-    }
+
 
     public void ajouteCompetenceauDevoir(String comp) {
         competencesEvaluesString.add(comp);
@@ -96,12 +88,12 @@ public class Devoir implements Serializable {
         return intitulle;
     }
 
-    public void setIntitulle(Editable s) {
-        intitulle = s.toString();
-    }
 
     public String resumer() {
         String s = remarques + " // " + smiley + "\n";
         return s;
+    }
+
+    public void setConsigne(String consigne) {this.consigne=consigne;
     }
 }

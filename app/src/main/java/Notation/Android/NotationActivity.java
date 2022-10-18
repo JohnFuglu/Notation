@@ -98,7 +98,8 @@ public class NotationActivity extends AppCompatActivity {
         devoirSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!parent.getItemAtPosition(position).toString().equals("aucun")) {
+                String s =parent.getItemAtPosition(position).toString();
+                if (!s.equals("aucun")) {
                     Intent evalDevoirAct = new Intent(NotationActivity.this, EvalDevoirActivity.class);
                     evalDevoirAct.putExtra("Classe", classe.getNomClasse());
                     evalDevoirAct.putExtra("Intitule", parent.getItemAtPosition(position).toString());
@@ -244,8 +245,12 @@ public class NotationActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    classe=dataHandler.classeFromFile(nomClasse);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 majDesTextes();
-                classe.updateClasse(eleve);
                 dataHandler.createSerializedClasse(classe);
                 finish();
             }

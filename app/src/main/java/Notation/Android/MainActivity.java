@@ -10,6 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileNotFoundException;
@@ -23,13 +27,28 @@ public class MainActivity extends AppCompatActivity {
     private Button creerDevoir, genererEvals;
     private DataHandler dataHandler;
     private Devoir d;
+    String classeToFetch;
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    try {
+                        spinnerDevoirs();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+    );
 
-    //    @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        String classeToFetch = intent.getStringExtra("nom_classe");
+
+
+        classeToFetch = intent.getStringExtra("nom_classe");
         genererEvals = findViewById(R.id.generer_Evals_Button);
 
         creerDevoir = findViewById(R.id.creerDevoir_button);
@@ -46,7 +65,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
 
         }
-        spinnerDevoirs();
+        try {
+            spinnerDevoirs();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
         intitulle.setText(classe.getNomClasse());
@@ -57,21 +80,29 @@ public class MainActivity extends AppCompatActivity {
                 Button b = (Button) v;
                 Intent devoirAct = new Intent(MainActivity.this, DevoirActivity.class);
                 devoirAct.putExtra("Classe_Name", classe.getNomClasse());
-                startActivity(devoirAct);
+                activityResultLauncher.launch(devoirAct);
             }
         });
 
         genererEvals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (d != null)
+                if (d != null){
+                    dataHandler = new DataHandler(getBaseContext());
+                    try {
+                        classe=  dataHandler.classeFromFile(classeToFetch);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     dataHandler.genererEvalTxt(classe, d);
+                }
             }
         });
 
     }
 
-    private void spinnerDevoirs() {
+    private void spinnerDevoirs() throws FileNotFoundException {
+        classe=dataHandler.classeFromFile(classeToFetch);
         Spinner devoirs = findViewById(R.id.Devoir_Selection);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
         adapter.add("aucun");
@@ -84,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         devoirs.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 if (!parent.getItemAtPosition(position).toString().equals("aucun")) {
                     d = classe.getDevoir(parent.getItemAtPosition(position).toString());
                 }
