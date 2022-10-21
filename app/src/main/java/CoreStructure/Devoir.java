@@ -14,6 +14,15 @@ import java.util.HashMap;
 
 public class Devoir implements Serializable {
     private String consigne;
+
+    public String getConsigne() {
+        return consigne;
+    }
+
+    public String getDateDevoir() {
+        return dateDevoir;
+    }
+
     private final String dateDevoir;
     private final String[] critereStrings = new String[4];
     private final HashMap<String, Smileys> grilleEval = new HashMap<>();

@@ -73,9 +73,10 @@ public class EvalDevoirActivity extends AppCompatActivity {
         sauver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                devoir.commenterDevoir(commentaire.getText().toString());
-                devoir.setSmiley(smiley);
-                eleve.ajoutDevoirFait(devoir);
+                Devoir devEleve = new Devoir(devoir.getIntitulle(),devoir.getConsigne(),devoir.getDateDevoir());
+                devEleve.commenterDevoir(commentaire.getText().toString());
+                devEleve.setSmiley(smiley);
+                eleve.ajoutDevoirFait(devEleve);
                 try {
                     dh.majClasse(classe);
                 } catch (FileNotFoundException e) {
