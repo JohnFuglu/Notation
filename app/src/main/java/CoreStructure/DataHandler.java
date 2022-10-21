@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class DataHandler {
     Context context;
@@ -98,7 +97,7 @@ public class DataHandler {
 
     public Eleve getEleveFromFile(String nom, Classe classe) {
         ArrayList<Eleve> eleves = classe.getClasseListEleves();
-        Iterator<Eleve> iterator = eleves.iterator();
+  //      Iterator<Eleve> iterator = eleves.iterator();
         for (Eleve eleve : eleves) {
             if (eleve.getnomPrenom().equals(nom))
                 return eleve;
@@ -113,7 +112,8 @@ public class DataHandler {
 
     public void genererEvalTxt(Classe c, Devoir d) {
         String s =d.getIntitulle() + "\n";
-        for (Eleve e : c.getClasseListEleves()) {
+
+        for (Eleve e :c.getClasseListEleves()) {
             s+=e.getEvalDevoir(d);
         }
         FileOutputStream fileOutputStream = null;
