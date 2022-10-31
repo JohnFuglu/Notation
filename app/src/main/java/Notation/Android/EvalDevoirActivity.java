@@ -73,7 +73,7 @@ public class EvalDevoirActivity extends AppCompatActivity {
         sauver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Devoir devEleve = new Devoir(devoir.getIntitulle(),devoir.getConsigne(),devoir.getDateDevoir());
+                Devoir devEleve = new Devoir(devoir.getIntitulle(),devoir.getConsigne(),devoir.getDateDevoir(),devoir.getTrimestre());
                 devEleve.commenterDevoir(commentaire.getText().toString());
                 devEleve.setSmiley(smiley);
                 eleve.ajoutDevoirFait(devEleve);

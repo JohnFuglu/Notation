@@ -16,6 +16,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Intitule_Text"
         app:layout_constraintTop_toBottomOf="@+id/tool" />
 
     <TextView
@@ -31,8 +32,8 @@
         android:id="@+id/Intitule_Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:minHeight="48dp"
         android:text="Intitule"
@@ -166,5 +167,25 @@
         app:layout_constraintBottom_toBottomOf="@+id/Date_View"
         app:layout_constraintStart_toEndOf="@+id/Date_View"
         app:layout_constraintTop_toTopOf="@+id/Date_View" />
+
+    <TextView
+        android:id="@+id/devoir_trim_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:numeric="integer"
+        android:text="1-2-3"
+        app:layout_constraintStart_toStartOf="@+id/Trimestre"
+        app:layout_constraintTop_toBottomOf="@+id/Trimestre" />
+
+    <TextView
+        android:id="@+id/Trimestre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:text="Trimestre:"
+        app:layout_constraintStart_toStartOf="@+id/classe_aff"
+        app:layout_constraintTop_toBottomOf="@+id/classe_aff" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

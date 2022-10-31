@@ -29,8 +29,13 @@ public class Eleve implements Comparable<Eleve>, Serializable {
     private double[] notesFinales = new double[3];
 
     private ArrayList<Competence> compValideArrayList = new ArrayList<Competence>();
+
+    public Set<Devoir> getDevoirsFaits() {
+        return devoirsFaits;
+    }
+
     private Set<Devoir> devoirsFaits = new HashSet<>();
-    private int trimestre = 0;
+    private int trimestre = 1;
 
     /**
      * Constructeur
@@ -58,12 +63,61 @@ public class Eleve implements Comparable<Eleve>, Serializable {
         nCompor[2] = 5;
         appreciations = new String[]{"aucune", "aucune", "aucune"};
     }
-
+    public String getNoteTrimestre(int trimestre){
+        notesFinales[trimestre-1]= nTrimestreTravaux[trimestre-1]+nParti[trimestre-1]+nCompor[trimestre-1];
+        return Double.toString(notesFinales[trimestre-1]);
+    }
     public void ajoutDevoirFait(Devoir d) {
         if (!devoirsFaits.contains(d))
             devoirsFaits.add(d);
     }
+    public void creeNoteTravaux(){
+        if(devoirsFaits.isEmpty())
+            return;
+        else{
+        for(Devoir d :devoirsFaits){
+             switch (SmileyUtil.smileyFromString(d.getSmiley())){
+                 case CONTENT:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.50d);
+                     break;
+                 case CONTENTmoins:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.40d);
+                     break;
+                 case CONTENTplus:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.60d);
+                     break;
+                 case TRESCONTENTplus:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+1);
+                     break;
+                 case TRESCONTENTmoins:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.8d);
+                     break;
+                 case TRESCONTENT:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.7d);
+                     break;
+                 case MOYENplus:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.5d);
+                     break;
+                 case MOYEN:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.45d);
+                     break;
+                 case MOYENmoins:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.35d);
+                     break;
+                 case PASCONTENTplus:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.30d);
+                     break;
+                 case PASCONTENT:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.25d);
+                     break;
+                 case PASCONTENTmoins:
+                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.10d);
+                     break;
+             }
+        }
+        }
 
+    }
     public String getEvalDevoir(Devoir d) {
         for(Devoir dd : devoirsFaits){
             if (dd.getIntitulle().equals(d.getIntitulle()))
@@ -98,26 +152,12 @@ public class Eleve implements Comparable<Eleve>, Serializable {
         return true;
     }
 
-    /**
-     * Note le comportement / 5
-     *
-     * @return boolean rentr�e
-     * @throws error si en dehors des clous
-     */
-    public boolean noterComportement(int trimestre, short note) {
-        if (note < 0 || note > 5)
-            throw new Error("La note doit �tre comprise en 0 et 5");
-        this.nCompor[trimestre] = note;
-        return true;
-    }
-
-
     public short getNoteParticipation(int trimestre) {
-        return nParti[trimestre];
+        return nParti[trimestre-1];
     }
 
     public short getNoteComportement(int trimestre) {
-        return nCompor[trimestre];
+        return nCompor[trimestre-1];
     }
 
     /**
@@ -185,7 +225,7 @@ public class Eleve implements Comparable<Eleve>, Serializable {
     }
 
     public void addAppreciation(String appreciation, int trimestre) {
-        appreciations[trimestre] = appreciation;
+        appreciations[trimestre-1] = appreciation;
     }
 
     public String[] getAppreciations() {
@@ -193,7 +233,7 @@ public class Eleve implements Comparable<Eleve>, Serializable {
     }
 
     public String getAppreciation(int trimestre) {
-        return appreciations[trimestre];
+        return appreciations[trimestre-1];
     }
 
     @Override
@@ -202,18 +242,18 @@ public class Eleve implements Comparable<Eleve>, Serializable {
     }
 
     public void augmenteParticipation(int trimestre) {
-        nParti[trimestre]++;
+        nParti[trimestre-1]++;
     }
 
     public void augmenteComportement(int trimestr) {
-        nCompor[trimestre]++;
+        nCompor[trimestr-1]++;
     }
 
     public void diminueParticipation(int trimestr) {
-        nParti[trimestre]--;
+        nParti[trimestr-1]--;
     }
 
     public void diminueComportement(int trimestr) {
-        nCompor[trimestre]--;
+        nCompor[trimestr-1]--;
     }
 }

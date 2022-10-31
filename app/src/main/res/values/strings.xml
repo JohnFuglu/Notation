@@ -11,18 +11,18 @@
     <string name="retour_bouton">Retour</string>
     <string name="sauver_bouton">Sauver</string>
     <string-array name="smileys">
-        <item>Très content + </item>
-        <item>Très content - </item>
-        <item>Très content </item>
-        <item>Content + </item>
-        <item>Content - </item>
-        <item>Content </item>
-        <item>Bof + </item>
-        <item>Bof - </item>
-        <item>Bof </item>
-        <item>Pas content + </item>
-        <item>Pas content - </item>
-        <item>Pas content </item>
+        <item>Très content +</item>
+        <item>Très content -</item>
+        <item>Très content</item>
+        <item>Content +</item>
+        <item>Content -</item>
+        <item>Content</item>
+        <item>Bof +</item>
+        <item>Bof -</item>
+        <item>Bof</item>
+        <item>Pas content +</item>
+        <item>Pas content -</item>
+        <item>Pas content</item>
     </string-array>
     <string-array name="Trimestres">
         <item>Trimestre 1 </item>

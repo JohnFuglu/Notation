@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import java.util.StringTokenizer;
 
 import CoreStructure.Classe;
 import CoreStructure.DataHandler;
+import CoreStructure.Devoir;
 import CoreStructure.Eleve;
 
 public class NotationActivity extends AppCompatActivity {
@@ -30,10 +32,10 @@ public class NotationActivity extends AppCompatActivity {
     private TextView compNumber, partNumber;
     private Classe classe;
     private DataHandler dataHandler;
-    private int trimestre = 0;
+    private int trimestre =1;
     private String appreciation;
     private double travaux, trimestreNote;
-
+    private TableLayout grid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +46,21 @@ public class NotationActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        spinnerDevoirs();
         spinnerTrimestre();
+        spinnerDevoirs();
+
+        displayEvalsDevoirs();
     }
 
+    private void displayEvalsDevoirs(){
+
+        for(Devoir d : eleve.getDevoirsFaits()){
+            TextView tv = new TextView(getApplicationContext());
+            if(d.getTrimestre()==trimestre)
+                tv.setText(d.getIntitulle()+ " " + d.getRemarques()+" " + d.getSmiley());
+            grid.addView(tv);
+        }
+    }
     private void spinnerTrimestre() {
         Spinner trimestreSpinner = findViewById(R.id.choix_trimestre);
         ArrayAdapter<CharSequence> adapterTri = ArrayAdapter.createFromResource(this,
@@ -58,7 +70,8 @@ public class NotationActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    trimestre = getTrimestreNbr(parent.getItemAtPosition(position).toString()) - 1;
+                    trimestre = getTrimestreNbr(parent.getItemAtPosition(position).toString());
+                    displayEvalsDevoirs();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -119,11 +132,10 @@ public class NotationActivity extends AppCompatActivity {
         eleve.addAppreciation(appreciation, trimestre);
         eleve.donneNotePourUnTrimestre(trimestre, trimestreNote);
         eleve.noterTravaux(trimestre, travaux);
+        noteTrimestre.setText(eleve.getNoteTrimestre(trimestre));
     }
 
     private void setUI() throws FileNotFoundException {
-        //PAR DEFAUT TRIMESTRE = 0
-
         Intent intent = getIntent();
         nomView = findViewById(R.id.nom_view);
         classeView = findViewById(R.id.classe_view);
@@ -137,7 +149,7 @@ public class NotationActivity extends AppCompatActivity {
         appreciationText = findViewById(R.id.Appreciation_Text);
         noteTravaux = findViewById(R.id.noteTra_nbr);
         noteTrimestre = findViewById(R.id.noteTri_nbr);
-
+        grid = findViewById(R.id.Grid_devoirs);
         noteTravaux.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -209,6 +221,7 @@ public class NotationActivity extends AppCompatActivity {
                     eleve.diminueComportement(trimestre);
                     short t = eleve.getNoteComportement(trimestre);
                     compNumber.setText(Short.toString(t));
+                    noteTrimestre.setText(eleve.getNoteTrimestre(trimestre));
                 }
             }
         });
@@ -219,26 +232,29 @@ public class NotationActivity extends AppCompatActivity {
                     eleve.augmenteComportement(trimestre);
                     short t = eleve.getNoteComportement(trimestre);
                     compNumber.setText(Short.toString(t));
+                    noteTrimestre.setText(eleve.getNoteTrimestre(trimestre));
                 }
             }
         });
         partMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (eleve.getNoteComportement(trimestre) > 0) {
+                if (eleve.getNoteParticipation(trimestre) > 0) {
                     eleve.diminueParticipation(trimestre);
                     short t = eleve.getNoteParticipation(trimestre);
                     partNumber.setText(Short.toString(t));
+                    noteTrimestre.setText(eleve.getNoteTrimestre(trimestre));
                 }
             }
         });
         partPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (eleve.getNoteComportement(trimestre) < 5) {
+                if (eleve.getNoteParticipation(trimestre) < 5) {
                     eleve.augmenteParticipation(trimestre);
                     short t = eleve.getNoteParticipation(trimestre);
                     partNumber.setText(Short.toString(t));
+                    noteTrimestre.setText(eleve.getNoteTrimestre(trimestre));
                 }
             }
         });
@@ -246,15 +262,22 @@ public class NotationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
+                    DataHandler dh = new DataHandler(getBaseContext());
                     classe=dataHandler.classeFromFile(nomClasse);
+                    majDesTextes();
+                    dh.majClasse(classe);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                majDesTextes();
-                dataHandler.createSerializedClasse(classe);
+               // majDesTextes();
+            //    dataHandler.createSerializedClasse(classe);
                 finish();
+
+
             }
         });
+        eleve.creeNoteTravaux();
+        noteTrimestre.setText(eleve.getNoteTrimestre(trimestre));
     }
 
     protected void boutonsGris() {

@@ -36,7 +36,7 @@ public class DevoirActivity extends AppCompatActivity {
     private Devoir devoir;
     private TextView date;
     private TextView intituleTv;
-
+    private TextView triView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,7 @@ public class DevoirActivity extends AppCompatActivity {
         Intent intent = getIntent();
         classeNom = intent.getStringExtra("Classe_Name");
         TextView classeAffiche = findViewById(R.id.classe_aff);
+        triView = findViewById(R.id.devoir_trim_view);
         classeAffiche.setText(classeNom);
         prepareUi();
         liaisonText();
@@ -68,10 +69,52 @@ public class DevoirActivity extends AppCompatActivity {
         }
 
     }
+    private short setTrimestre(){
 
+       short s=0;
+        if(triView.getText().toString().equals("1-2-3")){
+           String ss=date.getText().toString();
+           short tmp=Short.parseShort(ss.subSequence(3,5).toString());
+          switch (tmp){
+              case 9:
+                  s=1;
+                  break;
+              case 10:
+                  s=1;
+                  break;
+              case 11:
+                  s=1;
+                  break;   case 12:
+                  s=1;
+                  break;   case 1:
+                  s=2;
+                  break;
+                case 2:
+                  s=2;
+                  break;
+                case 3:
+                  s=2;
+                 break;
+                 case 4:
+                  s=3;
+                  break;
+              case 5:
+                  s=3;
+                  break;
+              case 6:
+                  s=2;
+                  break;
+          }
+
+        }else{
+            s=Short.parseShort(triView.getText().toString());
+        }
+        triView.setText(Short.toString(s));
+        return s;
+    }
     private void prepareUi() {
         TextView textView = findViewById(R.id.Consigne_View);
-        textView.addTextChangedListener(new TextWatcher() {
+         textView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -145,6 +188,8 @@ public class DevoirActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(s.length()==0)
+                    intitulle+="Vide";
                 intitulle = s.toString();
             }
         });
@@ -220,7 +265,8 @@ public class DevoirActivity extends AppCompatActivity {
                 criteres[3] = s.toString();
             }
         });
-        devoir = new Devoir(intitulle, " ", (String) date.getText());
+
+        devoir = new Devoir(intitulle, " ", (String) date.getText(), setTrimestre());
     }
 
     public void sauverDevoir() throws FileNotFoundException {

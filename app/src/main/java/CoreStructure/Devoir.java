@@ -2,7 +2,6 @@ package CoreStructure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 /**
@@ -25,24 +24,40 @@ public class Devoir implements Serializable {
 
     private final String dateDevoir;
     private final String[] critereStrings = new String[4];
-    private final HashMap<String, Smileys> grilleEval = new HashMap<>();
-    ArrayList<Competence> competencesEvalues = new ArrayList<>();
-    ArrayList<String> competencesEvaluesString = new ArrayList<>();
+  //  ArrayList<Competence> competencesEvalues = new ArrayList<>();
+       ArrayList<String> competencesEvaluesString = new ArrayList<>();
 
     public void setIntitulle(String intitulle) {
         this.intitulle = intitulle;
     }
 
+    public short getTrimestre() {
+        return trimestre;
+    }
+
+    public void setTrimestre(short trimestre) {
+        this.trimestre = trimestre;
+    }
+
+    private short trimestre=0;
     private String intitulle;
     private String remarques;
+
+    public String getRemarques() {
+        return remarques;
+    }
+
+    public String getSmiley() {
+        return smiley;
+    }
     private String smiley;
     private String classe;
-    public Devoir(String intitulle, String consigne, String dateDevoir) {
+    public Devoir(String intitulle, String consigne, String dateDevoir, short trimestre) {
         this.intitulle = intitulle;
         this.consigne = consigne;
         this.dateDevoir = dateDevoir;
+        this.trimestre=trimestre;
     }
-
     public void setSmiley(String smiley) {
         this.smiley = smiley;
     }

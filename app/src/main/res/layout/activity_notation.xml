@@ -104,7 +104,7 @@
 
                 <EditText
                     android:id="@+id/comport_number"
-                    android:layout_width="wrap_content"
+                    android:layout_width="48dp"
                     android:layout_height="match_parent"
                     android:inputType="number"
                     tools:ignore="SpeakableTextPresentCheck" />
@@ -193,6 +193,25 @@
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="24dp"
             android:text="Sauver" />
+
+        <TableLayout
+            android:id="@+id/Grid_devoirs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="#8193AA" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/Titre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="Résumé du trimestre" />
+            </TableRow>
+        </TableLayout>
 
     </LinearLayout>
 
