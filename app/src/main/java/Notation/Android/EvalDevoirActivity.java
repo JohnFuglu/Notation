@@ -77,6 +77,7 @@ public class EvalDevoirActivity extends AppCompatActivity {
                 devEleve.commenterDevoir(commentaire.getText().toString());
                 devEleve.setSmiley(smiley);
                 eleve.ajoutDevoirFait(devEleve);
+                eleve.creeNoteTravaux();
                 try {
                     dh.majClasse(classe);
                 } catch (FileNotFoundException e) {

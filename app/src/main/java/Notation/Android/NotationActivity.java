@@ -33,22 +33,21 @@ public class NotationActivity extends AppCompatActivity {
     private Classe classe;
     private DataHandler dataHandler;
     private int trimestre =1;
-    private String appreciation;
+    private String appreciation, nomClasse,nomEleve;
     private double travaux, trimestreNote;
     private TableLayout grid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notation);
-        dataHandler = new DataHandler(getBaseContext());
         try {
             setUI();
+            majDesTextes();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         spinnerTrimestre();
         spinnerDevoirs();
-
         displayEvalsDevoirs();
     }
 
@@ -128,24 +127,33 @@ public class NotationActivity extends AppCompatActivity {
         });
     }
 
-    private void majDesTextes() {
+    private Classe majDesTextes() throws FileNotFoundException {
+        Classe c = dataHandler.classeFromFile(nomClasse);
+        eleve=c.getEleve(nomEleve);
+        eleve.setNoteComportement(trimestre,compNumber);
+        eleve.setNoteParticipation(trimestre,partNumber);
         eleve.addAppreciation(appreciation, trimestre);
         eleve.donneNotePourUnTrimestre(trimestre, trimestreNote);
         eleve.noterTravaux(trimestre, travaux);
+        noteTravaux.setText(eleve.getNoteTravaux(trimestre));
+        eleve.creeNoteFinale(trimestre);
         noteTrimestre.setText(eleve.getNoteTrimestre(trimestre));
+        return c;
     }
 
     private void setUI() throws FileNotFoundException {
+        dataHandler = new DataHandler(getBaseContext());
         Intent intent = getIntent();
         nomView = findViewById(R.id.nom_view);
         classeView = findViewById(R.id.classe_view);
-        String nomEleve = intent.getStringExtra("Nom_Eleve");
+        nomEleve  = intent.getStringExtra("Nom_Eleve");
         nomView.setText(nomEleve);
-        String nomClasse = intent.getStringExtra("Classe_Name");
+        nomClasse = intent.getStringExtra("Classe_Name");
         classeView.setText(nomClasse);
         classe = dataHandler.classeFromFile(nomClasse);
         eleve = classe.getEleve(nomEleve);
-
+        if(!eleve.getDevoirsFaits().isEmpty())
+            eleve.creeNoteTravaux();
         appreciationText = findViewById(R.id.Appreciation_Text);
         noteTravaux = findViewById(R.id.noteTra_nbr);
         noteTrimestre = findViewById(R.id.noteTri_nbr);
@@ -210,6 +218,7 @@ public class NotationActivity extends AppCompatActivity {
         compNumber.setText(Short.toString(eleve.getNoteComportement(trimestre)));
         partNumber.setText(Short.toString(eleve.getNoteParticipation(trimestre)));
         Button saveButton = findViewById(R.id.Sauver_Button);
+        Button calculButton =findViewById(R.id.calculer_Button);
         Button compMinusButton = findViewById(R.id.minus_comport);
         Button compPlusButton = findViewById(R.id.plus_comport);
         Button partMinusButton = findViewById(R.id.minus_partici);
@@ -262,21 +271,24 @@ public class NotationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    DataHandler dh = new DataHandler(getBaseContext());
-                    classe=dataHandler.classeFromFile(nomClasse);
-                    majDesTextes();
-                    dh.majClasse(classe);
+                    dataHandler.majClasse(majDesTextes());
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-               // majDesTextes();
-            //    dataHandler.createSerializedClasse(classe);
                 finish();
-
-
             }
         });
-        eleve.creeNoteTravaux();
+        calculButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    majDesTextes();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         noteTrimestre.setText(eleve.getNoteTrimestre(trimestre));
     }
 

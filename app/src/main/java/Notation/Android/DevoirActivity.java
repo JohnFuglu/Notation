@@ -43,6 +43,7 @@ public class DevoirActivity extends AppCompatActivity {
         setContentView(R.layout.activity_devoir);
         Intent intent = getIntent();
         classeNom = intent.getStringExtra("Classe_Name");
+
         TextView classeAffiche = findViewById(R.id.classe_aff);
         triView = findViewById(R.id.devoir_trim_view);
         classeAffiche.setText(classeNom);
@@ -285,7 +286,6 @@ public class DevoirActivity extends AppCompatActivity {
         devoir.ajouteCompetenceauDevoir(comp2);
         devoir.setIntitulle(intitulle);
         devoir.setClasse(classeNom);
-
     }
 
 }

@@ -1,5 +1,7 @@
 package CoreStructure;
 
+import android.widget.TextView;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,7 +38,6 @@ public class Eleve implements Comparable<Eleve>, Serializable {
 
     private Set<Devoir> devoirsFaits = new HashSet<>();
     private int trimestre = 1;
-
     /**
      * Constructeur
      *
@@ -63,6 +64,9 @@ public class Eleve implements Comparable<Eleve>, Serializable {
         nCompor[2] = 5;
         appreciations = new String[]{"aucune", "aucune", "aucune"};
     }
+    public String getNoteTravaux(int trimestre){
+        return Double.toString(nTrimestreTravaux[trimestre-1]);
+    }
     public String getNoteTrimestre(int trimestre){
         notesFinales[trimestre-1]= nTrimestreTravaux[trimestre-1]+nParti[trimestre-1]+nCompor[trimestre-1];
         return Double.toString(notesFinales[trimestre-1]);
@@ -75,48 +79,39 @@ public class Eleve implements Comparable<Eleve>, Serializable {
         if(devoirsFaits.isEmpty())
             return;
         else{
-        for(Devoir d :devoirsFaits){
-             switch (SmileyUtil.smileyFromString(d.getSmiley())){
-                 case CONTENT:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.50d);
-                     break;
-                 case CONTENTmoins:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.40d);
-                     break;
-                 case CONTENTplus:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.60d);
-                     break;
-                 case TRESCONTENTplus:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+1);
-                     break;
-                 case TRESCONTENTmoins:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.8d);
-                     break;
-                 case TRESCONTENT:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.7d);
-                     break;
-                 case MOYENplus:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.5d);
-                     break;
-                 case MOYEN:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.45d);
-                     break;
-                 case MOYENmoins:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.35d);
-                     break;
-                 case PASCONTENTplus:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.30d);
-                     break;
-                 case PASCONTENT:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.25d);
-                     break;
-                 case PASCONTENTmoins:
-                     noterTravaux(trimestre-1,  nTrimestreTravaux[trimestre-1]+0.10d);
-                     break;
-             }
-        }
+            for(Devoir d :devoirsFaits){
+                switch (d.getSmiley()){
+                    case"Très content +":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=1.5d;
+                    case"Très content -":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=0.95d;
+                    case"Très content":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=1.3d;
+                    case"Content +":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=0.85d;
+                    case"Content":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=1d;
+                    case"Content -":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=0.80d;
+                        case"Bof +":
+                            nTrimestreTravaux[d.getTrimestre()-1]+=0.75d;
+                    case"Bof":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=0.65d;
+                    case"Bof -":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=0.55d;
+                    case"Pas content +":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=0.45d;
+                    case"Pas content":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=0.40d;
+                    case"Pas content -":
+                        nTrimestreTravaux[d.getTrimestre()-1]+=0.10d;
+                }
+            }
         }
 
+    }
+    public void creeNoteFinale(int trimestre){
+            notesFinales[trimestre-1]=nTrimestreTravaux[trimestre-1]+nCompor[trimestre-1]+nParti[trimestre-1];
     }
     public String getEvalDevoir(Devoir d) {
         for(Devoir dd : devoirsFaits){
@@ -255,5 +250,13 @@ public class Eleve implements Comparable<Eleve>, Serializable {
 
     public void diminueComportement(int trimestr) {
         nCompor[trimestr-1]--;
+    }
+
+    public void setNoteComportement(int trimestre, TextView compNumber) {
+        nCompor[trimestre-1]=Short.parseShort(compNumber.getText().toString());
+    }
+
+    public void setNoteParticipation(int trimestre, TextView partNumber) {
+        nParti[trimestre-1]=Short.parseShort(partNumber.getText().toString());
     }
 }
