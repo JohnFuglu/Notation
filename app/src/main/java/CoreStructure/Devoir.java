@@ -22,6 +22,15 @@ public class Devoir implements Serializable {
         return dateDevoir;
     }
 
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
+
+    private boolean dirty;
     private final String dateDevoir;
     private final String[] critereStrings = new String[4];
   //  ArrayList<Competence> competencesEvalues = new ArrayList<>();

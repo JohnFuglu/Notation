@@ -50,6 +50,7 @@ public class EvalDevoirActivity extends AppCompatActivity {
 
         spinnerSmiley();
         Button sauver = (Button) findViewById(R.id.save_button);
+        Button delete = (Button) findViewById(R.id.delete_button);
         TextView nomView = findViewById(R.id.nom_viewEval);
         String t1 = intent.getStringExtra("Classe");
         String t2 = intent.getStringExtra("Intitule");
@@ -86,6 +87,18 @@ public class EvalDevoirActivity extends AppCompatActivity {
                 finish();
             }
 
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eleve.deleteDevoir(devoir);
+                try {
+                    dh.majClasse(classe);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                finish();
+            }
         });
     }
     private void spinnerSmiley() {

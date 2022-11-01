@@ -38,18 +38,7 @@ public class Eleve implements Comparable<Eleve>, Serializable {
 
     private Set<Devoir> devoirsFaits = new HashSet<>();
     private int trimestre = 1;
-    /**
-     * Constructeur
-     *
-     * @param prenom : prenom de l'�l�ve
-     * @param nom    : nom de l'�l�ve
-     * @param classe : classe de l'�l�ve
-     */
-  /*  public Eleve(String prenom, Classe classe, String nom) {
-        this.prenom = prenom;
-        this.classe = classe;
-        this.nom = nom;
-    }*/
+
     public Eleve(String nomEtPrenom, Classe classe) {//TODO casser nom et prenom en 2
         nomPrenom = nomEtPrenom;
         classe = classe;
@@ -80,33 +69,58 @@ public class Eleve implements Comparable<Eleve>, Serializable {
             return;
         else{
             for(Devoir d :devoirsFaits){
+                if(!d.isDirty()){
                 switch (d.getSmiley()){
                     case"Très content +":
                         nTrimestreTravaux[d.getTrimestre()-1]+=1.5d;
+                        d.setDirty(true);
+                        break;
                     case"Très content -":
                         nTrimestreTravaux[d.getTrimestre()-1]+=0.95d;
+                        d.setDirty(true);
+                        break;
                     case"Très content":
                         nTrimestreTravaux[d.getTrimestre()-1]+=1.3d;
+                        d.setDirty(true);
+                        break;
                     case"Content +":
                         nTrimestreTravaux[d.getTrimestre()-1]+=0.85d;
+                        d.setDirty(true);
+                        break;
                     case"Content":
                         nTrimestreTravaux[d.getTrimestre()-1]+=1d;
+                        d.setDirty(true);
+                        break;
                     case"Content -":
                         nTrimestreTravaux[d.getTrimestre()-1]+=0.80d;
+                        d.setDirty(true);
+                        break;
                         case"Bof +":
                             nTrimestreTravaux[d.getTrimestre()-1]+=0.75d;
+                            d.setDirty(true);
+                            break;
                     case"Bof":
                         nTrimestreTravaux[d.getTrimestre()-1]+=0.65d;
+                        d.setDirty(true);
+                        break;
                     case"Bof -":
                         nTrimestreTravaux[d.getTrimestre()-1]+=0.55d;
+                        d.setDirty(true);
+                        break;
                     case"Pas content +":
                         nTrimestreTravaux[d.getTrimestre()-1]+=0.45d;
+                        d.setDirty(true);
+                        break;
                     case"Pas content":
                         nTrimestreTravaux[d.getTrimestre()-1]+=0.40d;
+                        d.setDirty(true);
+                        break;
                     case"Pas content -":
                         nTrimestreTravaux[d.getTrimestre()-1]+=0.10d;
+                        d.setDirty(true);
+                        break;
                 }
-            }
+            }}
         }
 
     }
@@ -258,5 +272,13 @@ public class Eleve implements Comparable<Eleve>, Serializable {
 
     public void setNoteParticipation(int trimestre, TextView partNumber) {
         nParti[trimestre-1]=Short.parseShort(partNumber.getText().toString());
+    }
+
+    public void deleteDevoir(Devoir devoir) {
+        for(Devoir d : devoirsFaits){
+            if(d.getIntitulle().equals(devoir.getIntitulle())){
+                devoirsFaits.remove(d);
+            }
+        }
     }
 }
