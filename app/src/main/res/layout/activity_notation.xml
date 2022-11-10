@@ -206,7 +206,8 @@
             android:id="@+id/Grid_devoirs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="#8193AA" >
+            android:backgroundTint="#8193AA"
+            >
 
             <TableRow
                 android:layout_width="match_parent"

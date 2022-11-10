@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class DataHandler {
     Context context;
@@ -109,7 +110,52 @@ public class DataHandler {
     public void majClasse(Classe c) throws FileNotFoundException {
         createSerializedClasse(c);
     }
+    public void majMultiClasses(Classe c, Devoir d) throws FileNotFoundException{
+        CharSequence[] s = context.fileList();
+        Stack<String> stack = new Stack<>();
+        char classeChiffre= c.getNomClasse().charAt(0);
 
+        for (CharSequence cs : s) {
+            CharSequence tmp= cs.subSequence(11,cs.length());
+            if(tmp.charAt(0) == classeChiffre)
+              stack.add((String)tmp);
+        }
+
+        for(int j=0;j<stack.size();j++){
+            FileInputStream fileInputStream = null;
+            ObjectInputStream objectInputStream = null;
+            Classe tmp = new Classe();
+            try {
+                fileInputStream = context.openFileInput("serialized_" +stack.elementAt(j));
+                objectInputStream = new ObjectInputStream(fileInputStream);
+                tmp = (Classe) objectInputStream.readObject();
+                tmp.ajouterUnDevoir(d);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (objectInputStream != null) {
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            createSerializedClasse(tmp);
+        }
+
+    }
     public void genererEvalTxt(Classe c, Devoir d) {
         String s =d.getIntitulle() + "\n";
 

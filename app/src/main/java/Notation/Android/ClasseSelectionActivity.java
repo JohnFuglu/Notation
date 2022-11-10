@@ -21,7 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -31,7 +31,7 @@ import CoreStructure.DataHandler;
 import CoreStructure.Eleve;
 
 public class ClasseSelectionActivity extends AppCompatActivity implements View.OnClickListener {
-    private final HashSet<Classe> classes = new HashSet<>();
+    private final ArrayList<Classe> classes = new ArrayList<>();
     private DataHandler dh;
 
     @Override
@@ -87,6 +87,7 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
                 classes.add(createClasse(set, sheet.getSheetName()));
 
             }
+            Collections.sort(classes);
             saveClassesData(classes);
         } catch (IOException e) {
             e.printStackTrace();
@@ -103,7 +104,7 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
 
     }
 
-    protected void saveClassesData(HashSet<Classe> classesHashset) {
+    protected void saveClassesData(ArrayList<Classe> classesHashset) {
         for (Classe c : classes) {
             dh.createSerializedClasse(c);
         }
@@ -124,14 +125,7 @@ public class ClasseSelectionActivity extends AppCompatActivity implements View.O
         for (File f : file) {
             ar.add(f);
         }
-        ar.sort(new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                if (01 < 02)
-                    return 1;
-                return 0;
-            }
-        });
+        Collections.sort(ar);
         for (int i = 0; i < file.length; i++) {
             if (file[i].getName().contains("serialized_")) {
                 String tmp = file[i].getName();

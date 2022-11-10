@@ -213,8 +213,7 @@ public class Eleve implements Comparable<Eleve>, Serializable {
 
     @Override
     public int compareTo(Eleve o) {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.nomPrenom.compareTo(o.getnomPrenom());
     }
 
     public int getTrimestre() {

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class DevoirActivity extends AppCompatActivity {
     private TextView date;
     private TextView intituleTv;
     private TextView triView;
+    boolean  multi=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -271,11 +273,19 @@ public class DevoirActivity extends AppCompatActivity {
     }
 
     public void sauverDevoir() throws FileNotFoundException {
+        CheckBox cBox = (CheckBox) findViewById(R.id.devoir_check);
+        multi = cBox.isChecked();
+
         rempliDevoir();
         DataHandler dh = new DataHandler(getBaseContext());
         classe = dh.classeFromFile(classeNom);
-        classe.ajouterUnDevoir(devoir);
-        dh.majClasse(classe);
+
+        if(!multi){
+            classe.ajouterUnDevoir(devoir);
+            dh.majClasse(classe);
+        }
+        if(multi)
+            dh.majMultiClasses(classe,devoir);
         finish();
     }
 

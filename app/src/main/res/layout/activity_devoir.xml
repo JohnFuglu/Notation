@@ -188,4 +188,13 @@
         app:layout_constraintStart_toStartOf="@+id/classe_aff"
         app:layout_constraintTop_toBottomOf="@+id/classe_aff" />
 
+    <CheckBox
+        android:id="@+id/devoir_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Multi-classe"
+        app:layout_constraintEnd_toStartOf="@+id/sauver_button"
+        app:layout_constraintTop_toTopOf="@+id/sauver_button" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

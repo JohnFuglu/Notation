@@ -12,7 +12,7 @@ import java.util.Iterator;
 /**
  * CLasse stockant les élèves
  */
-public class Classe implements Serializable {
+public class Classe implements Serializable, Comparable<Classe> {
 
     private final ArrayList<Eleve> classEleves = new ArrayList<Eleve>();
     private final ArrayList<Devoir> devoirDonnes = new ArrayList<>();
@@ -84,5 +84,15 @@ public class Classe implements Serializable {
                 return d;
         }
         return null;
+    }
+
+    public void deleteEleve(CharSequence text) {
+           classEleves.remove(getEleve(text.toString()));
+    }
+
+
+    @Override
+    public int compareTo(Classe o) {
+        return this.nomClasse.compareTo(o.nomClasse);
     }
 }

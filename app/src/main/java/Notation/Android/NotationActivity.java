@@ -1,6 +1,7 @@
 package Notation.Android;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -52,11 +53,11 @@ public class NotationActivity extends AppCompatActivity {
     }
 
     private void displayEvalsDevoirs(){
-
         for(Devoir d : eleve.getDevoirsFaits()){
             TextView tv = new TextView(getApplicationContext());
+            tv.setTextColor(Color.CYAN);
             if(d.getTrimestre()==trimestre)
-                tv.setText(d.getIntitulle()+ " " + d.getRemarques()+" " + d.getSmiley());
+                tv.setText(d.getIntitulle()+" " + d.getRemarques()+" " + d.getSmiley());
             grid.addView(tv);
         }
     }

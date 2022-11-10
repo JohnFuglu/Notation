@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
 
 import CoreStructure.Classe;
 import CoreStructure.DataHandler;
@@ -24,7 +25,7 @@ import CoreStructure.Devoir;
 
 public class MainActivity extends AppCompatActivity {
     private Classe classe;
-    private Button creerDevoir, genererEvals;
+    private Button creerDevoir, genererEvals, ajouterEleve;
     private DataHandler dataHandler;
     private Devoir d;
     String classeToFetch;
@@ -46,17 +47,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-
+        ajouterEleve=findViewById(R.id.ajoutEleveButton);
 
         classeToFetch = intent.getStringExtra("nom_classe");
         genererEvals = findViewById(R.id.generer_Evals_Button);
 
         creerDevoir = findViewById(R.id.creerDevoir_button);
         TextView intitulle = findViewById(R.id.classe_nom);
+
+
         try {
             dataHandler = new DataHandler(getBaseContext());
             classe = dataHandler.classeFromFile(classeToFetch);
-
+           Collections.sort(classe.getClasseListEleves());
             for (int i = 0; i < classe.getClasseListEleves().size(); i++) {
                 String s = classe.getClasseListEleves().get(i).getnomPrenom();
                 createButtonDynamicly(s);
@@ -99,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ajouterEleve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button b = (Button) v;
+                Intent ajouterEleve = new Intent(MainActivity.this, AjoutEleveActivity.class);
+                ajouterEleve.putExtra("Classe_Name", classe.getNomClasse());
+                activityResultLauncher.launch(ajouterEleve);
+            }
+        });
     }
 
     private void spinnerDevoirs() throws FileNotFoundException {
